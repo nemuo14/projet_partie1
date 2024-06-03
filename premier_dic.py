@@ -26,7 +26,7 @@ dic = {
     'Fruits': [0.6, 1.3],
     'Rustines': [0.05, 1.5]
 }
-
+temps=time.time()
 # calcul ratio masse/utilite
 for key in dic:
     dic[key].append(dic[key][1]/dic[key][0])
@@ -40,7 +40,7 @@ totalutilite = 0
 sacados = []
 
 #while totalmass < massmax:
-temps=time.time()
+
 for key in dic:
     print(key)
     if totalmass + dic[key][0] <= massmax:
