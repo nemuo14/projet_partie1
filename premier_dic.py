@@ -29,10 +29,10 @@ dic = {
 temps=time.time()
 # calcul ratio masse/utilite
 for key in dic:
-    dic[key].append(dic[key][1]/dic[key][0])
+    dic[key].append(dic[key][1]/dic[key][0]) #a division *23
 
 # tri par ratio
-dic = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True))
+dic = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True)) #sorting dic
 
 massmax = 0.6
 totalmass = 0
@@ -41,15 +41,15 @@ sacados = []
 
 #while totalmass < massmax:
 
-for key in dic:
+for key in dic: #*23
     print(key)
-    if totalmass + dic[key][0] <= massmax:
-        totalmass += dic[key][0]
-        totalutilite += dic[key][1]
+    if totalmass + dic[key][0] <= massmax: #23 add
+        totalmass += dic[key][0] #<23 add
+        totalutilite += dic[key][1] #<23 add
         sacados.append(key)
 temps_tot=time.time()-temps
 
 print('Objets à prendre:', sacados)
-print(temps_tot)
+print(format(temps_tot,".5f"))
 print('Total masse:', totalmass)
 print('Total utilité:', totalutilite)
