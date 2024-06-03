@@ -1,3 +1,4 @@
+# nom : [masse, utilite, ratio]
 dic = {
     'Pompe': [0.2, 1.5],
     'Démonte-pneus': [0.1, 1.5],
@@ -28,6 +29,19 @@ dic = {
 for key in dic:
     dic[key].append(dic[key][1]/dic[key][0])
 
+# tri par ratio
+dic = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True))
 
-for key in dic:
-    print(key, dic[key])
+massmax = 0.6
+totalmass = 0
+sacados = {}
+while totalmass < massmax:
+    for key in dic:
+        if totalmass + dic[key][0] <= massmax:
+            sacados[key] = dic[key]
+            totalmass += dic[key][0]
+            break
+
+for key in sacados:
+    print(key, sacados[key])
+print('Total masse:', totalmass)
