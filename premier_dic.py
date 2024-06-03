@@ -2,7 +2,7 @@ nom = ["Pompe", "Démonte-pneus", "Gourde", "Chambre à air", "Clé de 15", "Mul
 masse = [0.2, 0.1, 1, 0.2, 0.3, 0.2, 0.4, 0.2, 0.1, 0.2, 0.4, 0.4, 0.4, 0.1, 0.5, 0.4, 0.3, 0.4, 0.01, 0.05, 0.4, 0.6, 0.05]
 utilite = [1.5, 1.5, 2, 0.5, 1, 1.7, 0.8, 1.5, 0.4, 0.6, 1, 0.75, 1.75, 0.2, 0.4, 2, 1.8, 0, 0.1, 1.4, 0.8, 1.3, 1.5]
 
-dicc = {
+dic = {
     'Pompe': [0.2, 1.5],
     'Démonte-pneus': [0.1, 1.5],
     'Gourde': [1, 2],
@@ -27,9 +27,3 @@ dicc = {
     'Fruits': [0.6, 1.3],
     'Rustines': [0.05, 1.5]
 }
-
-dic = {}
-for i in range(len(nom)):
-    dic[nom[i]] = [masse[i], utilite[i]]
-
-print(dic)
