@@ -1,4 +1,6 @@
+import time
 # nom : [masse, utilite, ratio]
+
 dic = {
     'Pompe': [0.2, 1.5],
     'Démonte-pneus': [0.1, 1.5],
@@ -38,13 +40,16 @@ totalutilite = 0
 sacados = []
 
 #while totalmass < massmax:
+temps=time.time()
 for key in dic:
     print(key)
     if totalmass + dic[key][0] <= massmax:
         totalmass += dic[key][0]
         totalutilite += dic[key][1]
         sacados.append(key)
+temps_tot=time.time()-temps
 
 print('Objets à prendre:', sacados)
+print(temps_tot)
 print('Total masse:', totalmass)
 print('Total utilité:', totalutilite)
