@@ -40,16 +40,16 @@ totalutilite = 0
 sacados = []
 
 #while totalmass < massmax:
-
-for key in dic: #*23
-    print(key)
-    if totalmass + dic[key][0] <= massmax: #23 add
-        totalmass += dic[key][0] #<23 add
-        totalutilite += dic[key][1] #<23 add
-        sacados.append(key)
+for i in range(100):
+    for key in dic: #*23
+        print(key)
+        if totalmass + dic[key][0] <= massmax: #23 add
+            totalmass += dic[key][0] #<23 add
+            totalutilite += dic[key][1] #<23 add
+            sacados.append(key)
 temps_tot=time.time()-temps
 
 print('Objets à prendre:', sacados)
-print(format(temps_tot,".5f"))
+print(format(temps_tot/100,".25f"))
 print('Total masse:', totalmass)
 print('Total utilité:', totalutilite)
