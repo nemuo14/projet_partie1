@@ -34,14 +34,17 @@ dic = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True))
 
 massmax = 0.6
 totalmass = 0
-sacados = {}
-while totalmass < massmax:
-    for key in dic:
-        if totalmass + dic[key][0] <= massmax:
-            sacados[key] = dic[key]
-            totalmass += dic[key][0]
-            break
+totalutilite = 0
+sacados = []
 
-for key in sacados:
-    print(key, sacados[key])
+#while totalmass < massmax:
+for key in dic:
+    print(key)
+    if totalmass + dic[key][0] <= massmax:
+        totalmass += dic[key][0]
+        totalutilite += dic[key][1]
+        sacados.append(key)
+
+print('Objets à prendre:', sacados)
 print('Total masse:', totalmass)
+print('Total utilité:', totalutilite)
