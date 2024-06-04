@@ -1,4 +1,5 @@
 import time
+import random as rd
 # nom : [masse, utilite, ratio]
 from random import randint
 
@@ -53,6 +54,7 @@ def rangement_ratio(dic):
     print('Objets à prendre:', sacados)
     print('Total masse:', totalmass)
     print('Total utilité:', totalutilite)
+    return sacados
 
 def dico_nbr_entiers(dic):
     for items in dic.items():
@@ -114,16 +116,17 @@ def recherche_locale(dic,massmax):
         liste_all.append(liste_obj)
     #print(liste_all)
     #print('\n')
-    while liste_all!=[]:
-        liste_pop=[]
-        for i in range(len(liste_all)):
-            if liste_all[i][1][0]>=massmissing+0.0001:
-                liste_pop.append(i)
-        #print(liste_pop)
-        for index in range(len(liste_pop)):
-            liste_all.pop(liste_pop[index]-index)
-            #print(liste_all)
-        break
+    # while liste_all!=[]:
+    #     liste_pop=[]
+    #     for i in range(len(liste_all)):
+    #         if liste_all[i][1][0]>=massmissing+0.0001:
+    #             liste_pop.append(i)
+    #     #print(liste_pop)
+    #     for index in range(len(liste_pop)):
+    #         liste_all.pop(liste_pop[index]-index)
+    #         #print(liste_all)
+    liste_retenue=rangement_ratio(dic)
+    print('la liste retenu',liste_retenue)
 
     for i in range(40):
         choix = randint(0,1)
@@ -137,7 +140,7 @@ def recherche_locale(dic,massmax):
             liste_tmp.pop(randint(0,len(liste_tmp)-1))
         if choix==1:
             liste_tmp.append(liste_all[randint(0,len(liste_all)-1)])
-        
+        print('encore',calcul_masse(liste_tmp,dic))
         if calcul_masse(liste_tmp,dic) <= massmax + 0.0001:
             if calcul_utilite(liste_tmp,dic) > calcul_utilite(liste_retenue,dic):
                 liste_retenue = liste_tmp.copy()
