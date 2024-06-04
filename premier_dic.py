@@ -1,5 +1,6 @@
 import time
 # nom : [masse, utilite, ratio]
+from random import randint
 
 dic = {
     'Pompe': [0.2, 1.5],
@@ -111,29 +112,50 @@ def recherche_locale(dic,massmax):
     for k,v in dic.items():
         liste_obj=[k,v]
         liste_all.append(liste_obj)
-    print(liste_all)
-    print('\n')
+    #print(liste_all)
+    #print('\n')
     while liste_all!=[]:
         liste_pop=[]
         for i in range(len(liste_all)):
             if liste_all[i][1][0]>=massmissing+0.0001:
                 liste_pop.append(i)
-        print(liste_pop)
+        #print(liste_pop)
         for index in range(len(liste_pop)):
             liste_all.pop(liste_pop[index]-index)
-            print(liste_all)
+            #print(liste_all)
         break
 
+    for i in range(40):
+        choix = randint(0,1)
+        print(choix)
+        #si c'est 0 on enlève un élément
+        #si c'est 1 on rajoute un élément
+
+        liste_tmp = liste_retenue.copy()
+
+        if choix==0:
+            liste_tmp.pop(randint(0,len(liste_tmp)-1))
+        if choix==1:
+            liste_tmp.append(liste_all[randint(0,len(liste_all)-1)])
+        
+        if calcul_masse(liste_tmp,dic) <= massmax + 0.0001:
+            if calcul_utilite(liste_tmp,dic) > calcul_utilite(liste_retenue,dic):
+                liste_retenue = liste_tmp.copy()
+                print('--------------\nnouvelle liste retenue')
+                print(liste_retenue)
+                print("score :",calcul_utilite(liste_retenue,dic))
+
+        
+    print("-----------------\nliste finale :",liste_retenue)
+    print("score final :",calcul_utilite(liste_retenue,dic))
 
 
+"""
+        liste_solution_initiale = [liste_all[0]]
 
-
-
-
-
-
-
-
+        while calcul_utilite(liste_solution_initiale,dic)<calcul_utilite(liste_all,dic):
+            pass
+"""
 
 
 """
