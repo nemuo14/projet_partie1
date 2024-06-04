@@ -116,7 +116,7 @@ if __name__ == "__main__":
     print(format(temps_tot,".25f"))
 
     # dico_nbr_entiers(dic)
-    #bonjour
+    #retruc
 
 
 """
