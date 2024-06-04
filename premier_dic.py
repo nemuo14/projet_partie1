@@ -68,16 +68,27 @@ def rangement_ratio(dic):
     print('Total masse:', totalmass)
     print('Total utilité:', totalutilite)
 
+def dico_nbr_entiers(dic):
+    for items in dic.items():
+        items[1][0]=round(items[1][0]*100)
+        items[1][1]=round(items[1][1]*100)
+        print('voici les items', items)
+    print(dic)
+    return dic
+
+def rangement_dynamique(dic):
+
 if __name__ == "__main__":
 
     temps=time.time()
 
-    for i in range(100):
-        dic = calcul_ratio(dic)
-        dic_trie = tri_ratio(dic)
-        rangement_ratio(dic_trie)
+    #for i in range(100):
+    dic = calcul_ratio(dic)
+    dic_trie = tri_ratio(dic)
+    rangement_ratio(dic_trie)
 
     temps_tot = time.time()-temps
     print(format(temps_tot,".25f"))
+    dico_nbr_entiers(dic)
     #bonjour
 
