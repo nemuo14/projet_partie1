@@ -77,6 +77,19 @@ def dico_nbr_entiers(dic):
     return dic
 
 def rangement_dynamique(dic):
+    T=[[0]*]
+    for c in range(round(0.6*100)):
+        T[0].append(c)
+    for i in range(23):
+        for c in range(round(0.6 * 100)):
+            if c>=
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
 
