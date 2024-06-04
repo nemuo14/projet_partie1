@@ -114,13 +114,16 @@ def recherche_locale(dic,massmax):
     print(liste_all)
     print('\n')
     while liste_all!=[]:
-        a=0
-        for i in range(len(liste_all)-a-1):
-            print(i)
-            if liste_all[i][1][0]>=massmissing:
-                liste_all.pop(i)
-                a+=1
+        liste_pop=[]
+        for i in range(len(liste_all)):
+            if liste_all[i][1][0]>=massmissing+0.0001:
+                liste_pop.append(i)
+        print(liste_pop)
+        for index in range(len(liste_pop)):
+            liste_all.pop(liste_pop[index]-index)
             print(liste_all)
+        break
+
 
 
 
