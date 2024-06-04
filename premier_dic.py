@@ -104,16 +104,29 @@ def bruteforce(dic):
 if __name__ == "__main__":
 
     dic = calcul_ratio(dic)
-    #dic_trie = tri_ratio(dic)
+
+    dic_trie = tri_ratio(dic)
+    print(dic_trie)
+    print("-----------------------------")
+    dic_tronc = dict(list(dic_trie.items())[:18])
+    print(dic_tronc)
 
     #print(len(dic))
 
-    temps=time.time()
+
+    temps1=time.time()
 
     print(max(bruteforce(dic),key=lambda x:x[-1]))
 
-    temps_tot = time.time()-temps
-    print(format(temps_tot,".25f"))
+    temps_tot1 = time.time()-temps1
+    print(format(temps_tot1,".25f"))
+
+    temps2=time.time()
+
+    print(max(bruteforce(dic_tronc),key=lambda x:x[-1]))
+
+    temps_tot2 = time.time()-temps2
+    print(format(temps_tot2,".25f"))
 
     # dico_nbr_entiers(dic)
     #retruc
