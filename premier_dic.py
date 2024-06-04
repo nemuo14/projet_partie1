@@ -34,15 +34,6 @@ def calcul_ratio(dic):
     return dic
 
 def tri_ratio(dic):
-    # elements = list(dic.items()).reverse()
-    # print(elements)
-
-    # def get_second_value(item):
-    #     return item[1][2]
-
-    # elements.sort(key=get_second_value)
-
-    # dic_trie = {k: v for k, v in elements}
     dic_trie = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True)) #sorting dic
     return dic_trie
 
