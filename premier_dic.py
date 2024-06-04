@@ -136,6 +136,7 @@ if __name__ == "__main__":
     print("-------------------")
 
     liste_finale = []
+    liste_masse=[]
 
     for i in range(2**23-1):
         binne = tobin(i).zfill(23)
@@ -144,10 +145,7 @@ if __name__ == "__main__":
         masse_tpmp = calcul_masse(liste_tpmp,dic_trie)
         if masse_tpmp <= 0.6:
             liste_finale.append(liste_tpmp)
-    
-    for j in liste_finale:
-        liste_masse=[]
-        liste_masse.append(calcul_masse(j,dic_trie))
+            liste_masse.append(masse_tpmp)
     
     print(max(liste_masse))
 
