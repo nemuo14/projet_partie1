@@ -89,28 +89,31 @@ def calcul_utilite(liste_objets,dic):
         utilite+=dic[obj][1]
     return utilite
 
-            
+def bruteforce(dic):
+    liste_finale = []
+    n = len(dic)
+    for i in range(2**n):
+        liste_objets = select_bin_objects(dic,tobin(i).zfill(n))
+        if calcul_masse(liste_objets,dic) <= 0.6+0.0001:# 0.6 + marge d'erreur des floats
+            liste_objets.append(calcul_utilite(liste_objets,dic))#on rajoute le total de l'utilité à la fin de la liste
+            liste_finale.append(liste_objets)
+    return liste_finale
 
 
 
 if __name__ == "__main__":
 
     dic = calcul_ratio(dic)
-    dic_trie = tri_ratio(dic)
+    #dic_trie = tri_ratio(dic)
 
-    liste_finale = []
+    #print(len(dic))
 
-    for i in range(2**23-1):
-        binne = tobin(i).zfill(23)
-        liste_tpmp = select_bin_objects(dic,binne)
-        # print(liste_tpmp)
-        masse_tpmp = calcul_masse(liste_tpmp,dic)
-        if masse_tpmp <= 0.6:
-            liste_tpmp.append(calcul_utilite(liste_tpmp,dic))
-            liste_finale.append(liste_tpmp)
-    
-    print(liste_finale[0:10])
-    print(max(liste_finale,key=lambda x:x[-1]))
+    temps=time.time()
+
+    print(max(bruteforce(dic),key=lambda x:x[-1]))
+
+    temps_tot = time.time()-temps
+    print(format(temps_tot,".25f"))
 
     # dico_nbr_entiers(dic)
     #bonjour
