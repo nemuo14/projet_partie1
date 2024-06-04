@@ -37,12 +37,6 @@ def tri_ratio(dic):
     dic_trie = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True)) #sorting dic
     return dic_trie
 
-#
-
-#while totalmass < massmax:
-# for i in range(100):
-#     rangement_ratio(dic_trie)
-
 def rangement_ratio(dic):
     massmax = 0.6
     totalmass = 0
@@ -89,6 +83,17 @@ def calcul_utilite(liste_objets,dic):
         utilite+=dic[obj][1]
     return utilite
 
+
+"""
+        _                      _        _
+   __ _| | __ _  ___  ___     | |_ _ __(_)___
+  / _` | |/ _` |/ _ \/ __|    | __| '__| / __|
+ | (_| | | (_| | (_) \__ \    | |_| |  | \__ \
+  \__,_|_|\__, |\___/|___/     \__|_|  |_|___/
+          |___/
+
+"""
+
 def bruteforce(dic,massmax):
     liste_finale = []
     n = len(dic)
@@ -101,17 +106,21 @@ def bruteforce(dic,massmax):
 
 
 
-if __name__ == "__main__":
+"""
+                  _
+  _ __ ___   __ _(_)_ __
+ | '_ ` _ \ / _` | | '_ \
+ | | | | | | (_| | | | | |
+ |_| |_| |_|\__,_|_|_| |_|
 
+"""
+
+
+if __name__ == "__main__":
     dic = calcul_ratio(dic)
 
     dic_trie = tri_ratio(dic)
-    print(dic_trie)
-    print("-----------------------------")
     dic_tronc = dict(list(dic_trie.items())[:18])
-    print(dic_tronc)
-
-    #print(len(dic))
 
 
     temps1=time.time()
@@ -119,7 +128,7 @@ if __name__ == "__main__":
     #print(max(bruteforce(dic,4),key=lambda x:x[-1]))
 
     temps_tot1 = time.time()-temps1
-    print(format(temps_tot1,".25f")) #0.6=> 7.6 en 51.25s 2=>15.05 en 55.28 3=> 17.85 en 58.59 4=> 19.95 en 63.488  5=>22 en 65.83s
+    print(format(temps_tot1,".25f")) 
 
 
     temps2=time.time()
@@ -127,21 +136,17 @@ if __name__ == "__main__":
     print(max(bruteforce(dic_tronc,5),key=lambda x:x[-1]))
 
     temps_tot2 = time.time()-temps2
-    print(format(temps_tot2,".25f")) #0.6 => 7.6 en 1.15s 2=> 15.05 en 2.03s 3=> 17.75 en 2.13s 4=> 19.85 en 2.39s 5=>21.85 en 2.48s
+    print(format(temps_tot2,".25f"))
 
-    # dico_nbr_entiers(dic)
-    #retruc
-
-
-"""
-    temps=time.time()
-
-    #for i in range(100):
-    dic = calcul_ratio(dic)
-    dic_trie = tri_ratio(dic)
-    # rangement_ratio(dic_trie)
-
-    temps_tot = time.time()-temps
-    print(format(temps_tot,".25f"))
-
-"""
+# bruteforce nul :     0.6 =>  7.60 en 51.25s 
+#                      2   => 15.05 en 55.28s
+#                      3   => 17.85 en 58.59s
+#                      4   => 19.95 en 63.48s
+#                      5   => 22.00 en 65.83s
+#
+# bruteforce tronqué : 0.6 =>  7.60 en 1.15s
+#                      2   => 15.05 en 2.03s
+#                      3   => 17.75 en 2.13s
+#                      4   => 19.85 en 2.39s
+#                      5   => 21.85 en 2.48s
+#
