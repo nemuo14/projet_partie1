@@ -91,31 +91,40 @@ def calcul_masse(liste_objets,dic):
     for obj in liste_objets:
         masse+=dic[obj][0]
     return masse
+
+def calcul_utilite(liste_objets,dic):
+    utilite=0
+    for obj in liste_objets:
+        utilite+=dic[obj][1]
+    return utilite
+
             
-
-# def rangement_dynamique(dic):
-#     T=[[0]*]
-#     for c in range(round(0.6*100)):
-#         T[0].append(c)
-#     for i in range(23):
-#         for c in range(round(0.6 * 100)):
-#             if c>=
-
-
-
-# def rangement_brut(dic):
-#     potential=[]
-#     for i in range(1, 2 ** 24 ):
-#         for j in range(24)
-#             if i>j:
-
-#             potential.append()
-
 
 
 
 if __name__ == "__main__":
 
+    liste_finale = []
+    liste_utilite=[]
+
+    dic_trie = tri_ratio(dic)
+
+    for i in range(2**23-1):
+        binne = tobin(i).zfill(23)
+        liste_tpmp = select_bin_objects(dic_trie,binne)
+        # print(liste_tpmp)
+        masse_tpmp = calcul_masse(liste_tpmp,dic_trie)
+        if masse_tpmp <= 0.6:
+            liste_finale.append(liste_tpmp)
+            liste_utilite.append(calcul_utilite(liste_tpmp,dic_trie))
+    
+    print(max(liste_utilite))
+
+    # dico_nbr_entiers(dic)
+    #bonjour
+
+
+"""
     temps=time.time()
 
     #for i in range(100):
@@ -126,29 +135,4 @@ if __name__ == "__main__":
     temps_tot = time.time()-temps
     print(format(temps_tot,".25f"))
 
-    print("-------------------")
-    print(dic_trie)
-    print("-------------------")
-    avion = select_bin_objects(dic_trie,tobin(13))
-    print(avion)
-    print("-------------------")
-    print(calcul_masse(avion,dic_trie))
-    print("-------------------")
-
-    liste_finale = []
-    liste_masse=[]
-
-    for i in range(2**23-1):
-        binne = tobin(i).zfill(23)
-        liste_tpmp = select_bin_objects(dic_trie,binne)
-        # print(liste_tpmp)
-        masse_tpmp = calcul_masse(liste_tpmp,dic_trie)
-        if masse_tpmp <= 0.6:
-            liste_finale.append(liste_tpmp)
-            liste_masse.append(masse_tpmp)
-    
-    print(max(liste_masse))
-
-    # dico_nbr_entiers(dic)
-    #bonjour
-
+"""
