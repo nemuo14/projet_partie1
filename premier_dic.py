@@ -79,4 +79,5 @@ if __name__ == "__main__":
 
     temps_tot = time.time()-temps
     print(format(temps_tot,".25f"))
+    #bonjour
 
