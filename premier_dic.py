@@ -86,6 +86,23 @@ def rangement_dynamique(dic):
 
 
 
+def rangement_brut(dic):
+    potential=[]
+    for i in range(1, 2 ** 24 ):
+        for j in range(24)
+            if i>j:
+
+            potential.append()
+
+
+
+
+
+
+
+
+
+
 
 
 
