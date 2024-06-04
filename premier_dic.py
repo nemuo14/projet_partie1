@@ -95,21 +95,22 @@ def calcul_utilite(liste_objets,dic):
 
 if __name__ == "__main__":
 
-    liste_finale = []
-    liste_utilite=[]
-
+    dic = calcul_ratio(dic)
     dic_trie = tri_ratio(dic)
+
+    liste_finale = []
 
     for i in range(2**23-1):
         binne = tobin(i).zfill(23)
-        liste_tpmp = select_bin_objects(dic_trie,binne)
+        liste_tpmp = select_bin_objects(dic,binne)
         # print(liste_tpmp)
-        masse_tpmp = calcul_masse(liste_tpmp,dic_trie)
+        masse_tpmp = calcul_masse(liste_tpmp,dic)
         if masse_tpmp <= 0.6:
+            liste_tpmp.append(calcul_utilite(liste_tpmp,dic))
             liste_finale.append(liste_tpmp)
-            liste_utilite.append(calcul_utilite(liste_tpmp,dic_trie))
     
-    print(max(liste_utilite))
+    print(liste_finale[0:10])
+    print(max(liste_finale,key=lambda x:x[-1]))
 
     # dico_nbr_entiers(dic)
     #bonjour
