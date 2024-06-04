@@ -51,9 +51,9 @@ def rangement_ratio(dic):
             totalutilite += dic[key][1] #<23 add
             sacados.append(key)
 
-    print('Objets à prendre:', sacados)
-    print('Total masse:', totalmass)
-    print('Total utilité:', totalutilite)
+    # print('Objets à prendre:', sacados)
+    # print('Total masse:', totalmass)
+    # print('Total utilité:', totalutilite)
     return sacados
 
 def dico_nbr_entiers(dic):
@@ -112,8 +112,8 @@ def recherche_locale(dic,massmax):
     liste_all = []
     liste_retenue = []
     for k,v in dic.items():
-        liste_obj=[k,v]
-        liste_all.append(liste_obj)
+        #liste_obj=[k,v]
+        liste_all.append(k)
     #print(liste_all)
     #print('\n')
     # while liste_all!=[]:
@@ -125,31 +125,43 @@ def recherche_locale(dic,massmax):
     #     for index in range(len(liste_pop)):
     #         liste_all.pop(liste_pop[index]-index)
     #         #print(liste_all)
-    liste_retenue=rangement_ratio(dic)
-    print('la liste retenu',liste_retenue)
+    liste_retenue=['Lampes']#rangement_ratio(dic_trie)
+    #liste_retenue.pop(0)
+    #liste_retenue.pop(0)
+    print('\n\nliste initiale:',liste_retenue)
+    print("score initial :",calcul_utilite(liste_retenue,dic))
+    print("\ntous les objets :",liste_all)
 
-    for i in range(40):
-        choix = randint(0,1)
-        print(choix)
+    for i in range(1000000):
+        choix = randint(0,100)
         #si c'est 0 on enlève un élément
         #si c'est 1 on rajoute un élément
 
         liste_tmp = liste_retenue.copy()
 
-        if choix==0:
+        if choix<=5:
             liste_tmp.pop(randint(0,len(liste_tmp)-1))
-        if choix==1:
-            liste_tmp.append(liste_all[randint(0,len(liste_all)-1)])
-        print('encore',calcul_masse(liste_tmp,dic))
+            if len(liste_tmp)==0:
+                liste_tmp.append(liste_all[randint(0,len(liste_all)-1)])
+            else:
+                liste_retenue = liste_tmp.copy()
+        if choix>6:
+            index_all = randint(0,len(liste_all)-1)
+            elt = liste_all[index_all]
+            if elt not in liste_tmp:
+                liste_tmp.append(liste_all[index_all])
+
         if calcul_masse(liste_tmp,dic) <= massmax + 0.0001:
+            ##print("\nnouvelle liste :",liste_tmp)
+            ##print("liste retenue :",liste_retenue)
+            #print(calcul_utilite(liste_tmp,dic)," > ",calcul_utilite(liste_retenue,dic))
             if calcul_utilite(liste_tmp,dic) > calcul_utilite(liste_retenue,dic):
                 liste_retenue = liste_tmp.copy()
-                print('--------------\nnouvelle liste retenue')
-                print(liste_retenue)
-                print("score :",calcul_utilite(liste_retenue,dic))
+                #print('--------------\nnouvelle liste retenue:',liste_retenue)
+                #print("score :",calcul_utilite(liste_retenue,dic))
 
         
-    print("-----------------\nliste finale :",liste_retenue)
+    print("\n-----------------\n\nliste finale :",liste_retenue)
     print("score final :",calcul_utilite(liste_retenue,dic))
 
 
