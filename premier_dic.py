@@ -43,22 +43,29 @@ dic_trie = {k: v for k, v in elements}
 
 #dic = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True)) #sorting dic
 
-massmax = 0.6
-totalmass = 0
-totalutilite = 0
-sacados = []
-
 #while totalmass < massmax:
-for i in range(100):
+# for i in range(100):
+#     rangement_ratio(dic_trie)
+    
+temps_tot=time.time()-temps
+
+def rangement_ratio(dic):
+    massmax = 0.6
+    totalmass = 0
+    totalutilite = 0
+    sacados = []
     for key in dic: #*23
         print(key)
         if totalmass + dic[key][0] <= massmax: #23 add
             totalmass += dic[key][0] #<23 add
             totalutilite += dic[key][1] #<23 add
             sacados.append(key)
-temps_tot=time.time()-temps
 
-print('Objets à prendre:', sacados)
+    print('Objets à prendre:', sacados)
+    print('Total masse:', totalmass)
+    print('Total utilité:', totalutilite)
+
 print(format(temps_tot/100,".25f"))
-print('Total masse:', totalmass)
-print('Total utilité:', totalutilite)
+
+if __name__ == "__main__":
+    rangement_ratio(dic_trie)
