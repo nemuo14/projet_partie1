@@ -26,28 +26,31 @@ dic = {
     'Fruits': [0.6, 1.3],
     'Rustines': [0.05, 1.5]
 }
-temps=time.time()
 # calcul ratio masse/utilite
-for key in dic:
-    dic[key].append(dic[key][1]/dic[key][0]) #a division *23
 
+def calcul_ratio(dic):
+    for key in dic:
+        dic[key].append(dic[key][1]/dic[key][0]) #a division *23
+    return dic
 
-elements = list(dic.items())
+def tri_ratio(dic):
+    # elements = list(dic.items()).reverse()
+    # print(elements)
 
-def get_second_value(item):
-    return item[1][1]
+    # def get_second_value(item):
+    #     return item[1][2]
 
-elements.sort(key=get_second_value)
+    # elements.sort(key=get_second_value)
 
-dic_trie = {k: v for k, v in elements}    
+    # dic_trie = {k: v for k, v in elements}
+    dic_trie = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True)) #sorting dic
+    return dic_trie
 
-#dic = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True)) #sorting dic
+#
 
 #while totalmass < massmax:
 # for i in range(100):
 #     rangement_ratio(dic_trie)
-    
-temps_tot=time.time()-temps
 
 def rangement_ratio(dic):
     massmax = 0.6
@@ -65,7 +68,15 @@ def rangement_ratio(dic):
     print('Total masse:', totalmass)
     print('Total utilité:', totalutilite)
 
-print(format(temps_tot/100,".25f"))
-
 if __name__ == "__main__":
-    rangement_ratio(dic_trie)
+
+    temps=time.time()
+
+    for i in range(100):
+        dic = calcul_ratio(dic)
+        dic_trie = tri_ratio(dic)
+        rangement_ratio(dic_trie)
+
+    temps_tot = time.time()-temps
+    print(format(temps_tot,".25f"))
+
