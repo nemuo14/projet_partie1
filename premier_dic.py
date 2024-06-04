@@ -89,12 +89,12 @@ def calcul_utilite(liste_objets,dic):
         utilite+=dic[obj][1]
     return utilite
 
-def bruteforce(dic):
+def bruteforce(dic,massmax):
     liste_finale = []
     n = len(dic)
     for i in range(2**n):
         liste_objets = select_bin_objects(dic,tobin(i).zfill(n))
-        if calcul_masse(liste_objets,dic) <= 0.6+0.0001:# 0.6 + marge d'erreur des floats
+        if calcul_masse(liste_objets,dic) <= massmax+0.0001:# 0.6 + marge d'erreur des floats
             liste_objets.append(calcul_utilite(liste_objets,dic))#on rajoute le total de l'utilité à la fin de la liste
             liste_finale.append(liste_objets)
     return liste_finale
@@ -116,17 +116,18 @@ if __name__ == "__main__":
 
     temps1=time.time()
 
-    print(max(bruteforce(dic),key=lambda x:x[-1]))
+    #print(max(bruteforce(dic,4),key=lambda x:x[-1]))
 
     temps_tot1 = time.time()-temps1
-    print(format(temps_tot1,".25f"))
+    print(format(temps_tot1,".25f")) #0.6=> 7.6 en 51.25s 2=>15.05 en 55.28 3=> 17.85 en 58.59 4=> 19.95 en 63.488  5=>22 en 65.83s
+
 
     temps2=time.time()
 
-    print(max(bruteforce(dic_tronc),key=lambda x:x[-1]))
+    print(max(bruteforce(dic_tronc,5),key=lambda x:x[-1]))
 
     temps_tot2 = time.time()-temps2
-    print(format(temps_tot2,".25f"))
+    print(format(temps_tot2,".25f")) #0.6 => 7.6 en 1.15s 2=> 15.05 en 2.03s 3=> 17.75 en 2.13s 4=> 19.85 en 2.39s 5=>21.85 en 2.48s
 
     # dico_nbr_entiers(dic)
     #retruc
