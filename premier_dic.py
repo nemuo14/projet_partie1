@@ -76,34 +76,40 @@ def dico_nbr_entiers(dic):
     print(dic)
     return dic
 
-def rangement_dynamique(dic):
-    T=[[0]*]
-    for c in range(round(0.6*100)):
-        T[0].append(c)
-    for i in range(23):
-        for c in range(round(0.6 * 100)):
-            if c>=
+def tobin(n):
+    return bin(n)[2:]
+
+def select_bin_objects(dic,nbin):
+    liste = []
+    for i in range(len(nbin)):
+        if nbin[i]=='1':
+            liste.append(list(dic)[i])
+    return liste
+
+def calcul_masse(liste_objets,dic):
+    masse=0
+    for obj in liste_objets:
+        masse+=dic[obj][0]
+    return masse
+            
+
+# def rangement_dynamique(dic):
+#     T=[[0]*]
+#     for c in range(round(0.6*100)):
+#         T[0].append(c)
+#     for i in range(23):
+#         for c in range(round(0.6 * 100)):
+#             if c>=
 
 
 
-def rangement_brut(dic):
-    potential=[]
-    for i in range(1, 2 ** 24 ):
-        for j in range(24)
-            if i>j:
+# def rangement_brut(dic):
+#     potential=[]
+#     for i in range(1, 2 ** 24 ):
+#         for j in range(24)
+#             if i>j:
 
-            potential.append()
-
-
-
-
-
-
-
-
-
-
-
+#             potential.append()
 
 
 
@@ -115,10 +121,30 @@ if __name__ == "__main__":
     #for i in range(100):
     dic = calcul_ratio(dic)
     dic_trie = tri_ratio(dic)
-    rangement_ratio(dic_trie)
+    # rangement_ratio(dic_trie)
 
     temps_tot = time.time()-temps
     print(format(temps_tot,".25f"))
-    dico_nbr_entiers(dic)
+
+    print("-------------------")
+    print(dic_trie)
+    print("-------------------")
+    avion = select_bin_objects(dic_trie,tobin(13))
+    print(avion)
+    print("-------------------")
+    print(calcul_masse(avion,dic_trie))
+    print("-------------------")
+
+    for i in range(0,2**23-1,100):
+        liste_finale = []
+        binne = tobin(i)
+        liste_tpmp = select_bin_objects(dic_trie,binne)
+        masse_tpmp = calcul_masse(liste_tpmp,dic_trie)
+        if masse_tpmp <= 0.6:
+            liste_finale.append(liste_tpmp)
+    
+    print(liste_finale)
+
+    # dico_nbr_entiers(dic)
     #bonjour
 
