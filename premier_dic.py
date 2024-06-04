@@ -135,15 +135,21 @@ if __name__ == "__main__":
     print(calcul_masse(avion,dic_trie))
     print("-------------------")
 
-    for i in range(0,2**23-1,100):
-        liste_finale = []
-        binne = tobin(i)
+    liste_finale = []
+
+    for i in range(2**23-1):
+        binne = tobin(i).zfill(23)
         liste_tpmp = select_bin_objects(dic_trie,binne)
+        # print(liste_tpmp)
         masse_tpmp = calcul_masse(liste_tpmp,dic_trie)
         if masse_tpmp <= 0.6:
             liste_finale.append(liste_tpmp)
     
-    print(liste_finale)
+    for j in liste_finale:
+        liste_masse=[]
+        liste_masse.append(calcul_masse(j,dic_trie))
+    
+    print(max(liste_masse))
 
     # dico_nbr_entiers(dic)
     #bonjour
