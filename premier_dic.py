@@ -104,6 +104,33 @@ def bruteforce(dic,massmax):
             liste_finale.append(liste_objets)
     return liste_finale
 
+def recherche_locale(dic,massmax):
+    massmissing=massmax
+    liste_all = []
+    liste_retenue = []
+    for k,v in dic.items():
+        liste_obj=[k,v]
+        liste_all.append(liste_obj)
+    print(liste_all)
+    print('\n')
+    while liste_all!=[]:
+        a=0
+        for i in range(len(liste_all)-a-1):
+            print(i)
+            if liste_all[i][1][0]>=massmissing:
+                liste_all.pop(i)
+                a+=1
+            print(liste_all)
+
+
+
+
+
+
+
+
+
+
 
 
 """
@@ -120,23 +147,26 @@ if __name__ == "__main__":
     dic = calcul_ratio(dic)
 
     dic_trie = tri_ratio(dic)
-    dic_tronc = dict(list(dic_trie.items())[:18])
 
+    recherche_locale(dic,0.6)
 
-    temps1=time.time()
-
-    #print(max(bruteforce(dic,4),key=lambda x:x[-1]))
-
-    temps_tot1 = time.time()-temps1
-    print(format(temps_tot1,".25f")) 
-
-
-    temps2=time.time()
-
-    print(max(bruteforce(dic_tronc,5),key=lambda x:x[-1]))
-
-    temps_tot2 = time.time()-temps2
-    print(format(temps_tot2,".25f"))
+    # dic_tronc = dict(list(dic_trie.items())[:18])
+    #
+    #
+    # temps1=time.time()
+    #
+    # #print(max(bruteforce(dic,4),key=lambda x:x[-1]))
+    #
+    # temps_tot1 = time.time()-temps1
+    # print(format(temps_tot1,".25f"))
+    #
+    #
+    # temps2=time.time()
+    #
+    # print(max(bruteforce(dic_tronc,5),key=lambda x:x[-1]))
+    #
+    # temps_tot2 = time.time()-temps2
+    # print(format(temps_tot2,".25f"))
 
 # bruteforce nul :     0.6 =>  7.60 en 51.25s 
 #                      2   => 15.05 en 55.28s
