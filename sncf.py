@@ -1,5 +1,10 @@
 # galvanised square steel
-# nom longueur largeur hauteur
+
+# marchandise : [nom, longueur, largeur, hauteur]
+
+# dimensions : [longueur, largeur, hauteur]
+dimensions_wagon = [11.583, 2.294, 2.569]
+
 import csv
 
 import tkinter as tk
@@ -8,7 +13,7 @@ root = tk.Tk()
 root.title("Dessin de plusieurs rectangles")
 
 # Création du canvas
-canvas = tk.Canvas(root, width=1600, height=600)
+canvas = tk.Canvas(root, width=1600, height=750)
 canvas.pack()
 root.state('zoomed')
 
@@ -52,6 +57,7 @@ def dessine_train_d1(train):
     window_width = 1400
 
     size_multiplier = 12
+
     small_margin = 3
     wagon_width = 100
 
@@ -80,6 +86,49 @@ def dessine_train_d1(train):
 
     root.mainloop()
 
+
+def dessine_train_d2(train):
+    window_width = 1400
+
+    size_multiplier = 12
+    small_margin = 3
+
+    wagon_coords = [10,10]
+    
+    march_coords = [10,10]
+
+    #train : [ w[ e[ m[nom, long, largeur, hauteur] ] ] ] wagon_coords[0]+dimensions_wagon[0]
+
+    for i in range(len(train)):
+        etage_x = 0
+        wagon = train[i]
+        dessiner_quoi(canvas, wagon_coords[0], wagon_coords[1], dimensions_wagon[0]*size_multiplier, dimensions_wagon[1]*size_multiplier, "brown")
+
+        for j in range(len(wagon)):
+            etagere = wagon[j]
+            dessiner_quoi(canvas, wagon_coords[0]+etage_x, wagon_coords[1], dimensions_wagon[0]*size_multiplier, etagere[0][2]*size_multiplier, "blue", j)
+            march_y = 0
+
+            for k in range(len(etagere)):
+                marchandise = etagere[k]
+                dessiner_quoi(canvas, wagon_coords[0]+etage_x, wagon_coords[1]+march_y, marchandise[1]*size_multiplier, marchandise[2]*size_multiplier, "green", marchandise[0][:3])
+                march_y += marchandise[1]*size_multiplier
+
+            etage_x += etagere[0][2]*size_multiplier
+
+        march_coords[0] += 110
+        march_coords[1] = wagon_coords[1]
+        wagon_coords[0] += 110
+
+        if wagon_coords[0] > window_width:
+            wagon_coords[0] = 10
+            wagon_coords[1] += 150
+            march_coords[0] = 10
+            march_coords[1] += 150
+    
+    canvas.create_text(1200,500, text="nombre de wagons : "+str(len(train)), fill="black")
+
+    root.mainloop()
 
 
 """
@@ -139,18 +188,59 @@ def charger_train_d1(data_marchandises, train):
                     |_|                      |___/
 
 """
-def surface_dispo_etagere(etagere):
-    largeur_etagere=etagere[0][2]
 
+def largeur_etagere(etagere):
+    return etagere[0][3]
+
+def longeur_dispo_etagere(etagere):
+    return dimensions_wagon[0] - sum([marchandise[1] for marchandise in etagere])
+
+def largeur_utilisee_wagon(wagon):
+    return sum([etagere[0][2] for etagere in wagon if etagere])
 
 def charger_train_d2(data_marchandises, train):
     while len(data_marchandises) > 0:
-        #on pose le premier objet, ce qui crée une étagère
-        #on regarde si le deuxieme rentre dans cette étagère, sinon il crée une nouvelle étagère
-        #et si plus de place dans le wagon, il en crée un nouveau
+        #on parcourt le train par wagon et par étagère
+        marchandise = data_marchandises.pop(0)
 
+        placed = False
 
+        # étape 1 parcourir tous les wagons et étagères pour placer l'objet.
+        for i in range(len(train)):
+            wagon = train[i]
+            for j in range(len(wagon)):
+                etagere = wagon[j]
+               
 
+    return train
+
+"""
+ #on vérifie si l'étagère est assez longue pour accueillir la marchandise
+                # si non, on passe à l'étagère suivante.
+                # si oui, on vérifie si elle est assez large
+                    # si non, on passe à l'étagère suivante
+                    # si oui, on place l'objet sur l'étagère
+                # si on a parcouru toutes les étagères et qu'on n'a pas trouvé de place, on crée une nouvelle étagère
+                # si on a parcouru tous les wagons et qu'on n'a pas trouvé de place, on crée un nouveau wagon et on place l'objet dedans (dans une étagère)
+
+                if longeur_dispo_etagere(etagere) >= marchandise[1] and largeur_etagere(etagere) >= marchandise[2]:
+                    etagere.append(marchandise)
+                    placed = True
+                    break
+            if placed:
+                break
+        if not placed:
+            # étape 2 on cherche un wagon qui a une étagère qui peut accueillir la marchandise
+            for i in range(len(train)):
+                if largeur_utilisee_wagon(train[i]) + marchandise[2] <= dimensions_wagon[1]:
+                    train[i].append([marchandise])
+                    placed = True
+                    break
+
+            if not placed:
+                # Si aucun wagon existant ne peut accueillir la nouvelle étagère, on ajoute un nouveau wagon
+                train.append([[marchandise]])
+"""
 
 
 
@@ -182,7 +272,7 @@ def tri_d3(data_marchandises):
 
 
 
-dimensions_wagon = [11.583, 2.294, 2.569]
+
 
 
 """
@@ -195,5 +285,6 @@ data_marchandises_offline_d3 = tri_d3(data_marchandises)
 if __name__ == "__main__":
     data_marchandises = read_data_from_csv()
     train_patrie = [[]]
-    train_patrie = charger_train_d1(data_marchandises, train_patrie)
-    dessine_train_d1(train_patrie)
+    train_patrie = charger_train_d2(data_marchandises, train_patrie)
+    print(train_patrie)
+    dessine_train_d2(train_patrie)
