@@ -189,28 +189,59 @@ def charger_train_d1(data_marchandises, train):
 
 """
 
-def largeur_etagere(etagere):
-    return etagere[0][3]
+def is_trop_long(etagere, marchandise):
+    return marchandise[1] > longeur_dispo_etagere(etagere)
 
 def longeur_dispo_etagere(etagere):
-    return dimensions_wagon[0] - sum([marchandise[1] for marchandise in etagere])
+    if len(etagere) == 0:
+        return dimensions_wagon[0]
+    return dimensions_wagon[0] - somme_longueur_etagere(etagere)
+
+def somme_longueur_etagere(etagere):
+    if len(etagere) == 0:
+        return 0
+    return sum([marchandise[1] for marchandise in etagere])
+
+
+def is_trop_large(etagere, marchandise):
+    return largeur_etagere(etagere) < marchandise[2]
+
+def largeur_etagere(etagere):
+    return etagere[0][2]
+
+
 
 def largeur_utilisee_wagon(wagon):
     return sum([etagere[0][2] for etagere in wagon if etagere])
 
+
+
 def charger_train_d2(data_marchandises, train):
     while len(data_marchandises) > 0:
-        #on parcourt le train par wagon et par étagère
         marchandise = data_marchandises.pop(0)
 
         placed = False
 
-        # étape 1 parcourir tous les wagons et étagères pour placer l'objet.
-        for i in range(len(train)):
+        for i in range(len(train)):#parcourir tous les wagons
             wagon = train[i]
-            for j in range(len(wagon)):
+
+            for j in range(len(wagon)):#parcourir toutes les étagères
                 etagere = wagon[j]
-               
+
+                if (not is_trop_long(etagere, marchandise)) and (not is_trop_large(etagere, marchandise)) and (not placed):#si la marchandise rentre dans l'étagère
+                    etagere.append(marchandise)#on la met dans l'étagère
+                    placed = True
+
+            #ici on a parcouru toutes les étagères du wagon et on n'a pas trouvé de place pour la marchandise
+            if not placed:#si on n'a pas trouvé de place pour la marchandise dans une des étagères existantes, on va créer une nouvelle étagère
+                if largeur_utilisee_wagon(wagon) + marchandise[2] <= dimensions_wagon[1]:#on vérifie si on peut créer une nouvelle étagère
+                    wagon.append([marchandise])
+
+        #ici on a parcouru tous les wagons et on n'a pas trouvé de place pour une étagère pour la marchandise
+        if not placed:
+            train.append([[marchandise]])#on crée un nouveau wagon et on met la marchandise dedans
+            placed = True
+            
 
     return train
 
@@ -275,16 +306,19 @@ def tri_d3(data_marchandises):
 
 
 
-"""
-data_marchandises_offline_d1 = tri_d1(data_marchandises)
-data_marchandises_offline_d2 = tri_d2(data_marchandises)
-data_marchandises_offline_d3 = tri_d3(data_marchandises)
-"""
+
+
+
 
 
 if __name__ == "__main__":
     data_marchandises = read_data_from_csv()
+
+    data_marchandises_offline_d1 = tri_d1(data_marchandises)
+    data_marchandises_offline_d2 = tri_d2(data_marchandises)
+    data_marchandises_offline_d3 = tri_d3(data_marchandises)
+
     train_patrie = [[]]
-    train_patrie = charger_train_d2(data_marchandises, train_patrie)
+    train_patrie = charger_train_d2(data_marchandises_offline_d2, train_patrie)
     print(train_patrie)
     dessine_train_d2(train_patrie)
