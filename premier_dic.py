@@ -82,7 +82,7 @@ def rangement_ratio(dic):
     totalutilite = 0
     sacados = []
     for key in dic: #*23
-        print(key)
+        #print(key)
         if totalmass + dic[key][0] <= massmax: #23 add
             totalmass += dic[key][0] #<23 add
             totalutilite += dic[key][1] #<23 add
@@ -112,8 +112,8 @@ def recherche_locale(dic,massmax):
 
     pourcentage_pop = 40
 
-    print('\n\nliste initiale:',liste_retenue)
-    print("score initial :",calcul_utilite(liste_retenue,dic))
+    #print('\n\nliste initiale:',liste_retenue)
+    #print("score initial :",calcul_utilite(liste_retenue,dic))
     # print("\ntous les objets :",liste_all)
 
     for i in range(1000000):
@@ -132,10 +132,10 @@ def recherche_locale(dic,massmax):
                 liste_tmp.append(liste_all[index_all])
 
         #
-        print(liste_tmp)
+        #print(liste_tmp)
         if calcul_masse(liste_tmp,dic) <= massmax + 0.0001:
-            print("\nnouvelle liste :",liste_tmp)
-            print("liste retenue :",liste_retenue)
+            #print("\nnouvelle liste :",liste_tmp)
+            #print("liste retenue :",liste_retenue)
             utilite_tmp = calcul_utilite(liste_tmp,dic)
             utilite_retenue = calcul_utilite(liste_retenue,dic)
             #print(utilite_tmp," > ",utilite_retenue," ?")
@@ -165,11 +165,14 @@ if __name__ == "__main__":
     dic_trie = tri_ratio(dic)
 
     sac = rangement_ratio(dic_trie)
-    print(sac)
+    print('voici le sac',sac)
     print(calcul_utilite(sac,dic))
+    print(calcul_masse(sac,dic))
 
-    #recherche_locale(dic,0.6)
-
+    temps1 = time.time()
+    recherche_locale(dic,0.6)
+    temps_tot1 = time.time() - temps1
+    print(format(temps_tot1,".25f"))
     # dic_tronc = dict(list(dic_trie.items())[:18])
     #
     #
@@ -187,6 +190,12 @@ if __name__ == "__main__":
     #
     # temps_tot2 = time.time()-temps2
     # print(format(temps_tot2,".25f"))
+
+    # temps1=time.time()
+    # print(rangement_ratio(dic))
+    #
+    # temps_tot1 = time.time()-temps1
+    # print(format(temps_tot1,".25f"))
 
 # bruteforce nul :     0.6 =>  7.60 en 51.25s 
 #                      2   => 15.05 en 55.28s

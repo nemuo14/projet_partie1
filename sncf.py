@@ -286,6 +286,8 @@ def charger_train_d2(data_marchandises, train):
 def tri_d1(data_marchandises):
     return sorted(data_marchandises, key=lambda x: x[1], reverse=True)
 
+def tri_d2_largeur(data_marchandises):
+    return sorted(data_marchandises, key=lambda x: x[2], reverse=True)
 
 def tri_d2(data_marchandises):
     for i in range(len(data_marchandises)):
@@ -315,10 +317,11 @@ if __name__ == "__main__":
     data_marchandises = read_data_from_csv()
 
     data_marchandises_offline_d1 = tri_d1(data_marchandises)
+    data_marchandises_offline_d2_lageur=tri_d2_largeur(data_marchandises)
     data_marchandises_offline_d2 = tri_d2(data_marchandises)
     data_marchandises_offline_d3 = tri_d3(data_marchandises)
 
     train_patrie = [[]]
-    train_patrie = charger_train_d2(data_marchandises_offline_d2, train_patrie)
+    train_patrie = charger_train_d2(data_marchandises_offline_d2_lageur, train_patrie)
     print(train_patrie)
     dessine_train_d2(train_patrie)
