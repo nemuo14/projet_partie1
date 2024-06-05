@@ -90,7 +90,9 @@ def dessine_train_d1(train):
 def dessine_train_d2(train):
     window_width = 1400
 
-    size_multiplier = 12
+    size_multiplier_y = 12
+    size_multiplier = 24
+    
     small_margin = 3
 
     wagon_coords = [10,10]
@@ -102,17 +104,17 @@ def dessine_train_d2(train):
     for i in range(len(train)):
         etage_x = 0
         wagon = train[i]
-        dessiner_quoi(canvas, wagon_coords[0], wagon_coords[1], dimensions_wagon[0]*size_multiplier, dimensions_wagon[1]*size_multiplier, "brown")
+        dessiner_quoi(canvas, wagon_coords[0], wagon_coords[1], dimensions_wagon[0]*size_multiplier_y, dimensions_wagon[1]*size_multiplier, "brown")
 
         for j in range(len(wagon)):
             etagere = wagon[j]
-            dessiner_quoi(canvas, wagon_coords[0]+etage_x, wagon_coords[1], dimensions_wagon[0]*size_multiplier, etagere[0][2]*size_multiplier, "blue", j)
+            dessiner_quoi(canvas, wagon_coords[0]+etage_x, wagon_coords[1], dimensions_wagon[0]*size_multiplier_y, etagere[0][2]*size_multiplier, "blue", j)
             march_y = 0
 
             for k in range(len(etagere)):
                 marchandise = etagere[k]
-                dessiner_quoi(canvas, wagon_coords[0]+etage_x, wagon_coords[1]+march_y, marchandise[1]*size_multiplier, marchandise[2]*size_multiplier, "green", marchandise[0][:3])
-                march_y += marchandise[1]*size_multiplier
+                dessiner_quoi(canvas, wagon_coords[0]+etage_x, wagon_coords[1]+march_y, marchandise[1]*size_multiplier_y, marchandise[2]*size_multiplier, "green", marchandise[0][:3])
+                march_y += marchandise[1]*size_multiplier_y
 
             etage_x += etagere[0][2]*size_multiplier
 
@@ -324,7 +326,7 @@ if __name__ == "__main__":
 
     train_patrie = [[]]
 
-    train_patrie = charger_train_d2(data_marchandises, train_patrie)
+    train_patrie = charger_train_d2(data_marchandises_offline_d2_lageur, train_patrie)
     nb=0
     for wagon in train_patrie:
         for etagere in wagon:
