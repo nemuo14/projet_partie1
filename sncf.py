@@ -12,15 +12,6 @@
 #     #     all_marchandises.append(data_marchandises[i][data_marchandises[i].values()])
 
 
-Pour obtenir un dictionnaire de la forme {"nom": [longueur, largeur, hauteur]} à partir d'un fichier Excel, tu peux utiliser pandas pour lire le fichier et ensuite transformer les données selon le format souhaité. Voici comment tu peux le faire :
-
-Installe pandas et openpyxl si ce n'est pas déjà fait :
-bash
-Copier le code
-pip install pandas openpyxl
-Utilise le code suivant pour lire le fichier Excel et convertir les données en un dictionnaire du format souhaité :
-python
-Copier le code
 import pandas as pd
 
 def excel_to_dict(filename, sheet_name=0):
