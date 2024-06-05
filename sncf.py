@@ -19,6 +19,72 @@ def dessiner_quoi(canvas, x, y, longueur, largeur, couleur="brown", texte=""):
 def dessiner_marchandise(canvas, x, y, longueur, largeur):
     canvas.create_rectangle(x, y, x + longueur, y + largeur, outline="black", fill="green")
 
+"""
+      _               _
+   __| | ___  ___ ___(_)_ __
+  / _` |/ _ \/ __/ __| | '_ \
+ | (_| |  __/\__ \__ \ | | | |
+  \__,_|\___||___/___/_|_| |_|
+
+"""
+
+def dessine_train_d1(train):
+    window_width = 1400
+
+    size_multiplier = 12
+    small_margin = 3
+    wagon_width = 100
+
+    wagon_coords = [10,10]
+    march_coords = [10,10]
+
+    for i in range(len(train)):
+        wagon = train[i]
+        dessiner_quoi(canvas, wagon_coords[0], wagon_coords[1], dimensions_wagon[0]*size_multiplier, wagon_width, "brown")
+        for j in range(len(train[i])):
+            marchandise = train[i][j]
+            dessiner_quoi(canvas, march_coords[0], march_coords[1], marchandise[1]*size_multiplier, wagon_width, "green", marchandise[0])
+            march_coords[1] += marchandise[1]*size_multiplier
+
+        march_coords[0] += 110
+        march_coords[1] = wagon_coords[1]
+        wagon_coords[0] += 110
+
+        if wagon_coords[0] > window_width:
+            wagon_coords[0] = 10
+            wagon_coords[1] += 150
+            march_coords[0] = 10
+            march_coords[1] += 150
+    
+    canvas.create_text(1200,500, text="nombre de wagons : "+str(len(train)), fill="black")
+
+    root.mainloop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 data_marchandises = []
 # all_marchandises=[]
@@ -68,38 +134,6 @@ def charger_train(data_marchandises, train):
         else:
             train[index_place_min].append(data_marchandises.pop(0))
     return train
-
-def dessine_train_d1(train):
-    window_width = 1400
-
-    size_multiplier = 12
-    small_margin = 3
-    wagon_width = 100
-
-    wagon_coords = [10,10]
-    march_coords = [10,10]
-
-    for i in range(len(train)):
-        wagon = train[i]
-        dessiner_quoi(canvas, wagon_coords[0], wagon_coords[1], dimensions_wagon[0]*size_multiplier, wagon_width, "brown")
-        for j in range(len(train[i])):
-            marchandise = train[i][j]
-            dessiner_quoi(canvas, march_coords[0], march_coords[1], marchandise[1]*size_multiplier, wagon_width, "green", marchandise[0])
-            march_coords[1] += marchandise[1]*size_multiplier
-
-        march_coords[0] += 110
-        march_coords[1] = wagon_coords[1]
-        wagon_coords[0] += 110
-
-        if wagon_coords[0] > window_width:
-            wagon_coords[0] = 10
-            wagon_coords[1] += 150
-            march_coords[0] = 10
-            march_coords[1] += 150
-    
-    canvas.create_text(1200,500, text="nombre de wagons : "+str(len(train)), fill="black")
-
-    root.mainloop()
 
 
 
