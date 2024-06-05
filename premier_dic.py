@@ -32,37 +32,12 @@ dic = {
 
 def calcul_ratio(dic):
     for key in dic:
-        dic[key].append(dic[key][1]/dic[key][0]) #a division *23
+        dic[key].append( (dic[key][1]) / (dic[key][0]) ) #a division *23
     return dic
 
 def tri_ratio(dic):
     dic_trie = dict(sorted(dic.items(), key=lambda item: item[1][2], reverse=True)) #sorting dic
     return dic_trie
-
-def rangement_ratio(dic):
-    massmax = 0.6
-    totalmass = 0
-    totalutilite = 0
-    sacados = []
-    for key in dic: #*23
-        print(key)
-        if totalmass + dic[key][0] <= massmax: #23 add
-            totalmass += dic[key][0] #<23 add
-            totalutilite += dic[key][1] #<23 add
-            sacados.append(key)
-
-    # print('Objets à prendre:', sacados)
-    # print('Total masse:', totalmass)
-    # print('Total utilité:', totalutilite)
-    return sacados
-
-def dico_nbr_entiers(dic):
-    for items in dic.items():
-        items[1][0]=round(items[1][0]*100)
-        items[1][1]=round(items[1][1]*100)
-        print('voici les items', items)
-    print(dic)
-    return dic
 
 def tobin(n):
     return bin(n)[2:]
@@ -73,6 +48,9 @@ def select_bin_objects(dic,nbin):
         if nbin[i]=='1':
             liste.append(list(dic)[i])
     return liste
+
+
+# calculs à partir de noms d'objets
 
 def calcul_masse(liste_objets,dic):
     masse=0
@@ -97,6 +75,21 @@ def calcul_utilite(liste_objets,dic):
 
 """
 
+# approché glouton
+def rangement_ratio(dic):
+    massmax = 0.6
+    totalmass = 0
+    totalutilite = 0
+    sacados = []
+    for key in dic: #*23
+        print(key)
+        if totalmass + dic[key][0] <= massmax: #23 add
+            totalmass += dic[key][0] #<23 add
+            totalutilite += dic[key][1] #<23 add
+            sacados.append(key)
+    return sacados
+
+# exact
 def bruteforce(dic,massmax):
     liste_finale = []
     n = len(dic)
@@ -107,55 +100,46 @@ def bruteforce(dic,massmax):
             liste_finale.append(liste_objets)
     return liste_finale
 
+# appoché recherche locale
 def recherche_locale(dic,massmax):
     massmissing=massmax
     liste_all = []
     liste_retenue = []
     for k,v in dic.items():
-        #liste_obj=[k,v]
         liste_all.append(k)
-    #print(liste_all)
-    #print('\n')
-    # while liste_all!=[]:
-    #     liste_pop=[]
-    #     for i in range(len(liste_all)):
-    #         if liste_all[i][1][0]>=massmissing+0.0001:
-    #             liste_pop.append(i)
-    #     #print(liste_pop)
-    #     for index in range(len(liste_pop)):
-    #         liste_all.pop(liste_pop[index]-index)
-    #         #print(liste_all)
+
     liste_retenue=['Lampes']#rangement_ratio(dic_trie)
-    #liste_retenue.pop(0)
-    #liste_retenue.pop(0)
+
+    pourcentage_pop = 40
+
     print('\n\nliste initiale:',liste_retenue)
     print("score initial :",calcul_utilite(liste_retenue,dic))
-    print("\ntous les objets :",liste_all)
+    # print("\ntous les objets :",liste_all)
 
     for i in range(1000000):
-        choix = randint(0,100)
         #si c'est 0 on enlève un élément
         #si c'est 1 on rajoute un élément
 
         liste_tmp = liste_retenue.copy()
 
-        if choix<=5:
+        #pop ou append
+        if randint(0,100) < pourcentage_pop and len(liste_tmp) > 0:
             liste_tmp.pop(randint(0,len(liste_tmp)-1))
-            if len(liste_tmp)==0:
-                liste_tmp.append(liste_all[randint(0,len(liste_all)-1)])
-            else:
-                liste_retenue = liste_tmp.copy()
-        if choix>6:
+        else:
             index_all = randint(0,len(liste_all)-1)
             elt = liste_all[index_all]
             if elt not in liste_tmp:
                 liste_tmp.append(liste_all[index_all])
 
+        #
+        print(liste_tmp)
         if calcul_masse(liste_tmp,dic) <= massmax + 0.0001:
-            ##print("\nnouvelle liste :",liste_tmp)
-            ##print("liste retenue :",liste_retenue)
-            #print(calcul_utilite(liste_tmp,dic)," > ",calcul_utilite(liste_retenue,dic))
-            if calcul_utilite(liste_tmp,dic) > calcul_utilite(liste_retenue,dic):
+            print("\nnouvelle liste :",liste_tmp)
+            print("liste retenue :",liste_retenue)
+            utilite_tmp = calcul_utilite(liste_tmp,dic)
+            utilite_retenue = calcul_utilite(liste_retenue,dic)
+            #print(utilite_tmp," > ",utilite_retenue," ?")
+            if utilite_tmp > utilite_retenue:
                 liste_retenue = liste_tmp.copy()
                 #print('--------------\nnouvelle liste retenue:',liste_retenue)
                 #print("score :",calcul_utilite(liste_retenue,dic))
@@ -164,13 +148,6 @@ def recherche_locale(dic,massmax):
     print("\n-----------------\n\nliste finale :",liste_retenue)
     print("score final :",calcul_utilite(liste_retenue,dic))
 
-
-"""
-        liste_solution_initiale = [liste_all[0]]
-
-        while calcul_utilite(liste_solution_initiale,dic)<calcul_utilite(liste_all,dic):
-            pass
-"""
 
 
 """
@@ -185,10 +162,13 @@ def recherche_locale(dic,massmax):
 
 if __name__ == "__main__":
     dic = calcul_ratio(dic)
-
     dic_trie = tri_ratio(dic)
 
-    recherche_locale(dic,0.6)
+    sac = rangement_ratio(dic_trie)
+    print(sac)
+    print(calcul_utilite(sac,dic))
+
+    #recherche_locale(dic,0.6)
 
     # dic_tronc = dict(list(dic_trie.items())[:18])
     #
