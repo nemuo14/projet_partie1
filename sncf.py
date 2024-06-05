@@ -139,6 +139,17 @@ def charger_train_d1(data_marchandises, train):
                     |_|                      |___/
 
 """
+def surface_dispo_etagere(etagere):
+    largeur_etagere=etagere[0][2]
+
+
+def charger_train_d2(data_marchandises, train):
+    while len(data_marchandises) > 0:
+        #on pose le premier objet, ce qui crée une étagère
+        #on regarde si le deuxieme rentre dans cette étagère, sinon il crée une nouvelle étagère
+        #et si plus de place dans le wagon, il en crée un nouveau
+
+
 
 
 
