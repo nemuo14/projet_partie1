@@ -17,6 +17,27 @@ def dessiner_quoi(canvas, x, y, longueur, largeur, couleur="brown", texte=""):
     canvas.create_text(x + largeur/2, y + longueur / 2, text=texte, fill="white")
 
 
+def read_data_from_csv():
+
+    data_marchandises = []
+    
+    with open("Données marchandises.csv", mode='r', newline='') as csvmarchandises:
+        marchandises = csv.reader(csvmarchandises, delimiter=';')
+        for row in marchandises:
+
+            if row[0] == 'Numéro ': # skip la première ligne
+                continue
+            row.pop(0) # on enlève le numéro
+            row[0] = row[0].replace(' ', '') # on enlève les espaces
+            row[1] = float(row[1].replace(',', '.')) # on remplace les virgules par des points
+            row[2] = float(row[2].replace(',', '.'))
+            row[3] = float(row[3].replace(',', '.'))
+
+            data_marchandises.append(row)
+    return data_marchandises
+
+
+
 
 """
       _               _
@@ -70,6 +91,11 @@ def dessine_train_d1(train):
 
 """
 
+def longeur_dispo_wagon(wagon):
+    #wagon : [[nom, longueur, largeur, hauteur], ...]
+    #retourne la longueur disponible dans le wagon (en d1)
+    return dimensions_wagon[0] - sum([marchandise[1] for marchandise in wagon])
+
 def chercher_index_place_min(liste_place_dispo):
     #liste_place_dispo : [[index_wagon, place_dispo], ...]
     #retourne l'index du wagon avec le moins de place dispo dans la liste
@@ -107,52 +133,14 @@ def charger_train_d1(data_marchandises, train):
 
 
 
+"""
+  _        _             _          _ _     _
+ | |_ _ __(_)___      __| | ___    | (_)___| |_ ___
+ | __| '__| / __|    / _` |/ _ \   | | / __| __/ _ \
+ | |_| |  | \__ \   | (_| |  __/   | | \__ \ ||  __/
+  \__|_|  |_|___/    \__,_|\___|   |_|_|___/\__\___|
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-data_marchandises = []
-# all_marchandises=[]
-with open("Données marchandises.csv", mode='r', newline='') as csvmarchandises:
-    marchandises = csv.reader(csvmarchandises, delimiter=';')
-    for row in marchandises:
-
-        if row[0] == 'Numéro ':  # skip la première ligne
-            continue
-
-        row.pop(0)  # on enlève le numéro
-
-        row[0] = row[0].replace(' ', '')  # on enlève les espaces
-
-        row[1] = float(row[1].replace(',', '.'))  # on remplace les virgules par des points
-        row[2] = float(row[2].replace(',', '.'))
-        row[3] = float(row[3].replace(',', '.'))
-
-        data_marchandises.append(row)
-
-    #print(data_marchandises)
-
-# longeur largeur hauteur
-dimensions_wagon = [11.583, 2.294, 2.569]
-
-
-def longeur_dispo_wagon(wagon):
-    return dimensions_wagon[0] - sum([marchandise[1] for marchandise in wagon])
-
-
-
-# repush
+"""
 def tri_d1(data_marchandises):
     return sorted(data_marchandises, key=lambda x: x[1], reverse=True)
 
@@ -169,18 +157,22 @@ def tri_d3(data_marchandises):
     return sorted(data_marchandises, key=lambda x: x[5], reverse=True)#attention à combien on utilise de bananes dans la vallée ohoh de dana lalilala
 
 
+
+
+
+
+dimensions_wagon = [11.583, 2.294, 2.569]
+
+
+"""
 data_marchandises_offline_d1 = tri_d1(data_marchandises)
-#print(data_marchandises_offline_d1)
 data_marchandises_offline_d2 = tri_d2(data_marchandises)
-#print(data_marchandises_offline_d2)
 data_marchandises_offline_d3 = tri_d3(data_marchandises)
-#print(data_marchandises_offline_d3)
+"""
 
-train_patrie = [[]]
-train_patrie = charger_train_d1(data_marchandises, train_patrie)
-dessine_train_d1(train_patrie)
 
-# train1 = [[]]
-# train1 = charger_train(data_marchandises_offline_d1, train1)
-# #print(train1)
-# dessine_train_d1(train1)
+if __name__ == "__main__":
+    data_marchandises = read_data_from_csv()
+    train_patrie = [[]]
+    train_patrie = charger_train_d1(data_marchandises, train_patrie)
+    dessine_train_d1(train_patrie)
