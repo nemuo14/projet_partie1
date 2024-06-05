@@ -236,6 +236,7 @@ def charger_train_d2(data_marchandises, train):
             if not placed:#si on n'a pas trouvé de place pour la marchandise dans une des étagères existantes, on va créer une nouvelle étagère
                 if largeur_utilisee_wagon(wagon) + marchandise[2] <= dimensions_wagon[1]:#on vérifie si on peut créer une nouvelle étagère
                     wagon.append([marchandise])
+                    placed=True
 
         #ici on a parcouru tous les wagons et on n'a pas trouvé de place pour une étagère pour la marchandise
         if not placed:
@@ -322,6 +323,14 @@ if __name__ == "__main__":
     data_marchandises_offline_d3 = tri_d3(data_marchandises)
 
     train_patrie = [[]]
-    train_patrie = charger_train_d2(data_marchandises_offline_d2_lageur, train_patrie)
+
+    train_patrie = charger_train_d2(data_marchandises, train_patrie)
+    nb=0
+    for wagon in train_patrie:
+        for etagere in wagon:
+            for marchandise in etagere:
+                nb+=1
+    print(nb)
+
     print(train_patrie)
     dessine_train_d2(train_patrie)
