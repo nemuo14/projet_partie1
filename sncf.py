@@ -1,25 +1,18 @@
 # galvanised square steel
 
-# marchandise : [nom, longueur, largeur, hauteur]
-
-# dimensions : [longueur, largeur, hauteur]
-dimensions_wagon = [11.583, 2.294, 2.569]
-
 import csv
 import tkinter as tk
 import time
 
 root = tk.Tk()
-
 canvas = tk.Canvas(root, width=1600, height=750)#création du canvas
 canvas.pack()
 root.state('zoomed')#plein écran fenêtré
 
 
-def dessiner_quoi(canvas, x, y, longueur, largeur, couleur="brown", texte=""):
-    # dessine un rectangle avec texte (centrée) et couleur
-    canvas.create_rectangle(x, y, x + largeur, y + longueur, outline="black", fill=couleur)
-    canvas.create_text(x + largeur / 2, y + longueur / 2, text=texte, fill="white")
+# marchandise : [nom, longueur, largeur, hauteur]
+# dimensions : [longueur, largeur, hauteur]
+dimensions_wagon = [11.583, 2.294, 2.569]
 
 
 def read_data_from_csv():
@@ -48,50 +41,101 @@ def read_data_from_csv():
 
 
 """
-      _               _               _ _ 
-   __| | ___  ___ ___(_)_ __       __| / |
-  / _` |/ _ \/ __/ __| | '_ \     / _` | |
- | (_| |  __/\__ \__ \ | | | |   | (_| | |
-  \__,_|\___||___/___/_|_| |_|    \__,_|_|
+      _               _
+   __| | ___  ___ ___(_)_ __
+  / _` |/ _ \/ __/ __| | '_ \
+ | (_| |  __/\__ \__ \ | | | |
+  \__,_|\___||___/___/_|_| |_|
 
 """
 
 sm = [24,8] # multiplicateur de taille
 
 wagon_coords = [10,10]
+etage_coords = [0,0]
 etagere_coords = [0,0]
+marchandise_coords = [0,0]
+
+def dessiner_quoi(canvas, x, y, longueur, largeur, couleur="brown", texte=""):
+    #permet de dessiner un rectangle avec un texte au centre
+    canvas.create_rectangle(x, y, x + largeur, y + longueur, outline="black", fill=couleur)# dessine un rectangle avec couleur
+    canvas.create_text(x + largeur / 2, y + longueur / 2, text=texte, fill="white")#texte au centre du rectangle
 
 def dessine_train(train):
-    dessine_wagons(train,wagon_coords)
+    #fonction principale qui dessine tout le train
+    if dimension == 3:
+        #en dimension 3, on dessine les wagons larges car ils doivent contenir des étages
+        dessine_wagons_larges(train,wagon_coords)
+    else:
+        #en dimension 1 et 2, on dessine les wagons normaux
+        dessine_wagons(train,wagon_coords)
 
-    canvas.create_text(1200, 500, text="nombre de wagons : " + str(len(train)), fill="black")
+    canvas.create_text(1200, 700, text="nombre de wagons : " + str(len(train)), fill="black")
     root.mainloop()
 
+
+#pour la d3
+def dessine_wagons_larges(train,wagon_coords):
+    for i in range(len(train)):#on parcourt tous les wagons
+        wagon = train[i]
+        wrap_coords(wagon_coords) #permet de revenir à la ligne si on dépasse la largeur du canvas
+
+        #ici en fait les wagons ne sont plus que les en-têtes des wagons qui contiennent les étages
+        dessiner_quoi(canvas, wagon_coords[0], wagon_coords[1],25, len(wagon)*dimensions_wagon[1]*sm[0], "purple", "wagon " + str(i+1))
+        
+        #conservation des coordonnées quand on passe au niveau inférieur
+        etage_coords[0] = wagon_coords[0]
+        etage_coords[1] = wagon_coords[1] + 30 #espace vertical entre l'en-tête et les étages
+        dessine_etages(wagon,etage_coords)
+        
+        wagon_coords[0] += (len(wagon)+1) * (dimensions_wagon[1]*sm[0]) #on passe au wagon suivant en ajoutant un espace de la taille d'un wagon
+
+def dessine_etages(etages,etage_coords):
+    for i in range(len(etages)):#on parcourt tous les étages
+        etage = etages[i]
+
+        #on dessine l'en-tête de l'étage
+        dessiner_quoi(canvas, etage_coords[0], etage_coords[1], 25, dimensions_wagon[1] * sm[0], "violet", "etage "+str(i+1))
+        #on dessine l'étage (équivalent à un wagon en d2) avec un espace vertical en dessous
+        dessiner_quoi(canvas, etage_coords[0], etage_coords[1]+30,dimensions_wagon[0]*sm[1], dimensions_wagon[1]*sm[0], "brown")
+        
+        #on transmet les coordonnées de l'étage aux étagères
+        etagere_coords[0] = etage_coords[0]
+        etagere_coords[1] = etage_coords[1] + 30 #espace vertical entre l'en-tête et les étagères (le même 30 que pour le dessin 4 lignes au dessus)
+        dessine_etageres(etage,etagere_coords)
+
+        etage_coords[0] += dimensions_wagon[1]*sm[0] #on affichera l'étage suivant de ce wagon juste à droite de celui-ci
+
+
+# pour la d1 et d2
 def dessine_wagons(train,wagon_coords):
-    if dimension == 3:
-        dessine_train_d3(train)
+    #en d1 et d2, on dessine de toute façon les wagons normaux
     for wagon in train:
         wrap_coords(wagon_coords)
         dessiner_quoi(canvas, wagon_coords[0], wagon_coords[1],dimensions_wagon[0]*sm[1], dimensions_wagon[1]*sm[0], "brown")
         
+        #si on est en d1, les marchandises sont directement dans les wagons
         if dimension == 1:
-            marchandise_coords = wagon_coords.copy()
+            marchandise_coords = wagon_coords.copy()# transmissions des coordonnées
             dessine_marchandises(wagon,marchandise_coords)
 
+        #si on est en d2, les marchandises sont dans des étagères
         elif dimension == 2:
             etagere_coords = wagon_coords.copy()
             dessine_etageres(wagon,etagere_coords)
 
-        wagon_coords[0] += 100
+        wagon_coords[0] += 100 #espace horizontal arbitraire entre les wagons
 
 def dessine_etageres(etageres,etagere_coords):
+    #on parcourt toutes les étagères
     for etagere in etageres:
-        dessiner_quoi(canvas, etagere_coords[0], etagere_coords[1], dimensions_wagon[0]*sm[1], etagere[0][2]*size_multiplier, "blue")
+        #on dessine l'étagère qui va contenir les marchandises
+        dessiner_quoi(canvas, etagere_coords[0], etagere_coords[1], dimensions_wagon[0]*sm[1], etagere[0][2]*sm[0], "blue")
         
-        marchandise_coords = etagere_coords.copy()
+        marchandise_coords = etagere_coords.copy()#transmission des coordonnées
         dessine_marchandises(etagere, marchandise_coords)
 
-        etagere_coords[0] += etagere[0][2]*sm[0]
+        etagere_coords[0] += etagere[0][2]*sm[0]#on passe à l'étagère suivante qui est collée à la précédente (décalée de sa taille)
 
 def dessine_marchandises(marchandises,marchandise_coords):
     for marchandise in marchandises:
@@ -99,99 +143,10 @@ def dessine_marchandises(marchandises,marchandise_coords):
         marchandise_coords[1] += marchandise[1]*sm[1]
 
 def wrap_coords(coords):
+    #permet de revenir à la ligne si on dépasse la largeur du canvas
     if coords[0] > 1400:
         coords[0] = 10
-        coords[1] += 150
-
-"""
-      _               _               _ _____
-   __| | ___  ___ ___(_)_ __       __| |___ /
-  / _` |/ _ \/ __/ __| | '_ \     / _` | |_ \
- | (_| |  __/\__ \__ \ | | | |   | (_| |___) |
-  \__,_|\___||___/___/_|_| |_|    \__,_|____/
-
-"""
-sm = [24,8] # multiplicateur de taille
-# [x, y, extra x]
-etagere_coords = [0,0,0]
-
-size_multiplier_y = 8
-size_multiplier = 24
-
-def dessine_marchandisesd3(etagere,etagere_coords):
-    march_y = 0
-    for marchandise in etagere:
-        dessiner_quoi(canvas, etagere_coords[0]+5, etagere_coords[1] + march_y,
-                      marchandise[1] * size_multiplier_y, marchandise[2] * size_multiplier,
-                      "green",marchandise[0][:3])
-        march_y += marchandise[1] * size_multiplier_y
-    etagere_coords[0] += etagere[0][2] * size_multiplier
-
-def dessine_etageresd3(etage,etage_coords):
-    for etagere in etage:
-
-        dessiner_quoi(canvas, etage_coords[0] + 5, etage_coords[1] + 35,
-                        dimensions_wagon[0] * sm[1], etagere[0][2] * size_multiplier, "blue")
-        
-        etagere_coords[1] = etage_coords[1] + 35
-        dessine_marchandisesd3(etagere, etagere_coords)
-    
-
-def dessine_train_d3(train):
-    window_width = 1400
-    
-
-    wagon_coords = [10, 10]
-    etage_coords = [10, 40]
-
-    wagon_header_y = 10
-    etage_header_y = 40
-
-    largetagere = 0
-
-    # train : [ w[ e[ m[nom, long, largeur, hauteur] ] ] ] wagon_coords[0]+dimensions_wagon[0]
-
-    for i in range(len(train)):
-        wagon = train[i]
-        dessiner_quoi(canvas, wagon_coords[0], wagon_coords[1], 25,
-                      dimensions_wagon[1] * len(wagon) * size_multiplier + 5 * (len(wagon) + 1), "purple",
-                      "wagon " + str(i + 1))
-        dessiner_quoi(canvas, wagon_coords[0], wagon_coords[1] + 30, dimensions_wagon[0] * size_multiplier_y + 40,
-                      dimensions_wagon[1] * size_multiplier * len(wagon) + 5 * (len(wagon) + 1), "brown")
-
-        for j in range(len(wagon)):
-            etage = wagon[j]
-            dessiner_quoi(canvas, etage_coords[0] + 5, etage_coords[1] + 5, 25, dimensions_wagon[1] * size_multiplier,
-                          "violet", "etage " + str(j + 1))
-            dessiner_quoi(canvas, etage_coords[0] + 5, etage_coords[1] + 35, dimensions_wagon[0] * size_multiplier_y,
-                          dimensions_wagon[1] * size_multiplier, "pink")
-
-            etagere_coords[0] = etage_coords[0]
-
-            for etagere in etage:
-                dessiner_quoi(canvas, etagere_coords[0] + 5, etage_coords[1] + 35,
-                              dimensions_wagon[0] * sm[1], etagere[0][2] * size_multiplier, "blue")
-                
-                etagere_coords[1] = etage_coords[1] + 35
-                dessine_marchandisesd3(etagere, etagere_coords)
-
-            
-            etage_coords[0] += dimensions_wagon[1] * size_multiplier + 5
-
-        wagon_coords[0] += dimensions_wagon[1] * size_multiplier * len(wagon) + dimensions_wagon[
-            1] * size_multiplier + 5 * (len(wagon) + 1)
-        etage_coords[0] = wagon_coords[0]
-
-        if wagon_coords[0] > window_width:
-            etage_coords[0] = 10
-            wagon_coords[0] = 10
-            wagon_coords[1] += 200
-            etage_coords[1] += 200
-            # wagon_header_y += 200
-
-    canvas.create_text(1200, 500, text="nombre de wagons : " + str(len(train)), fill="black")
-
-    root.mainloop()
+        coords[1] += 200
 
 
 
