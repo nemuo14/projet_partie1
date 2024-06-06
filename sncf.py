@@ -420,6 +420,36 @@ def tri_d3(data_marchandises): #par volume
 def tri_d3_hauteur(data_marchandises): #par hauteur
     return sorted(data_marchandises, key=lambda x: x[3], reverse=True)
 
+
+
+
+def espace_restant(dimension,train):
+    espace_marchandises = 0
+    if dimension==1:
+        for wagons in train:
+            for marchandises in wagons:
+                espace_marchandises+=marchandises[1]
+        return len(train)*dimensions_wagon[0]-espace_marchandises
+    if dimension==2:
+        for wagons in train:
+            for etageres in wagons:
+                for marchandises in etageres:
+                    espace_marchandises+=marchandises[1]*marchandises[2]
+        return len(train) * dimensions_wagon[0]*dimensions_wagon[1] - espace_marchandises
+    if dimension==3:
+        for wagons in train:
+            for etages in wagons:
+                for etageres in etages:
+                    for marchandises in etageres:
+                        espace_marchandises+=marchandises[1]*marchandises[2]*marchandises[3]
+        return len(train) * dimensions_wagon[0]*dimensions_wagon[1]*dimensions_wagon[2] - espace_marchandises
+
+
+
+
+
+
+
 """
                   _
   _ __ ___   __ _(_)_ __
@@ -431,20 +461,28 @@ def tri_d3_hauteur(data_marchandises): #par hauteur
 
 if __name__ == "__main__":
     dimension = 3
-
     data_marchandises = read_data_from_csv()
+    data_marchandises_offline_d1 = tri_d1(data_marchandises)
+    data_marchandises_offline_d2_largeur = tri_d2_largeur(data_marchandises)
+    data_marchandises_offline_d2 = tri_d2(data_marchandises)
+    data_marchandises_offline_d2_largeur_longueur=tri_d2_largeur_longeur(data_marchandises)
+    data_marchandises_offline_d3 = tri_d3(data_marchandises)
+    data_marchandises_offline_d3_hauteur= tri_d3_hauteur(data_marchandises)
     
     if dimension == 1:
-        train = charger_train_d1(data_marchandises, [])
+        train = charger_train_d1(data_marchandises_offline_d1, [])
         print(train)
+        print('il y a ',round(espace_restant(dimension,train),3),"m d'espace restant")
     
     elif dimension == 2:
-        train = charger_train_d2(data_marchandises, [])
+        train = charger_train_d2(data_marchandises_offline_d2_largeur_longueur, [])
         print(train)
+        print('il y a ', round(espace_restant(dimension, train), 3), "m² d'espace restant")
     
     elif dimension == 3:
-        train = charger_train_d3(data_marchandises, [])
+        train = charger_train_d3(data_marchandises_offline_d3_hauteur, [])
         print(train)
+        print('il y a ', round(espace_restant(dimension, train), 3), "m³ d'espace restant")
     
     dessine_train(train)
 
