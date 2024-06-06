@@ -6,24 +6,23 @@
 dimensions_wagon = [11.583, 2.294, 2.569]
 
 import csv
-
 import tkinter as tk
 
 root = tk.Tk()
-root.title("Dessin de plusieurs rectangles")
 
-# Création du canvas
-canvas = tk.Canvas(root, width=1600, height=750)
+canvas = tk.Canvas(root, width=1600, height=750)#création du canvas
 canvas.pack()
-root.state('zoomed')
+root.state('zoomed')#plein écran fenêtré
 
 
 def dessiner_quoi(canvas, x, y, longueur, largeur, couleur="brown", texte=""):
+    # dessine un rectangle avec texte (centrée) et couleur
     canvas.create_rectangle(x, y, x + largeur, y + longueur, outline="black", fill=couleur)
     canvas.create_text(x + largeur / 2, y + longueur / 2, text=texte, fill="white")
 
 
 def read_data_from_csv():
+    # renvoie une liste de marchandises avec les données du csv
     data_marchandises = []
 
     with open("Données marchandises.csv", mode='r', newline='') as csvmarchandises:
@@ -148,13 +147,35 @@ def dessine_train_d2(train):
   \__,_|\___||___/___/_|_| |_|    \__,_|____/
 
 """
+sm = [24,8] # multiplicateur de taille
+# [x, y, extra x]
+etagere_coords = [0,0,0]
 
+size_multiplier_y = 8
+size_multiplier = 24
+
+def dessine_marchandises(etagere,etagere_coords):
+    march_y = 0
+    for marchandise in etagere:
+        dessiner_quoi(canvas, etagere_coords[0]+5, etagere_coords[1] + march_y,
+                      marchandise[1] * size_multiplier_y, marchandise[2] * size_multiplier,
+                      "green",marchandise[0][:3])
+        march_y += marchandise[1] * size_multiplier_y
+    etagere_coords[0] += etagere[0][2] * size_multiplier
+
+def dessine_etageres(etage,etage_coords):
+    for etagere in etage:
+
+        dessiner_quoi(canvas, etage_coords[0] + 5, etage_coords[1] + 35,
+                        dimensions_wagon[0] * sm[1], etagere[0][2] * size_multiplier, "blue")
+        
+        etagere_coords[1] = etage_coords[1] + 35
+        dessine_marchandises(etagere, etagere_coords)
+    
 
 def dessine_train_d3(train):
     window_width = 1400
-
-    size_multiplier_y = 8
-    size_multiplier = 24
+    
 
     wagon_coords = [10, 10]
     etage_coords = [10, 40]
@@ -180,24 +201,22 @@ def dessine_train_d3(train):
                           "violet", "etage " + str(j + 1))
             dessiner_quoi(canvas, etage_coords[0] + 5, etage_coords[1] + 35, dimensions_wagon[0] * size_multiplier_y,
                           dimensions_wagon[1] * size_multiplier, "pink")
+            
 
-            for k in range(len(etage)):
-                etagere = etage[k]
-                dessiner_quoi(canvas, etage_coords[0] + 5 + largetagere, etage_coords[1] + 35,
-                              dimensions_wagon[0] * size_multiplier_y, etagere[0][2] * size_multiplier, "blue")
-                march_y = 0
 
-                for l in range(len(etagere)):
-                    marchandise = etagere[l]
-                    dessiner_quoi(canvas, etage_coords[0] + 5 + largetagere, etage_coords[1] + 35 + march_y,
-                                  marchandise[1] * size_multiplier_y, marchandise[2] * size_multiplier, "green",
-                                  marchandise[0][:3])
-                    march_y += marchandise[1] * size_multiplier_y
+            #dessine_etageres(etage,etage_coords)
 
-                largetagere += etagere[0][2] * size_multiplier
+            etagere_coords[0] = etage_coords[0]
 
+            for etagere in etage:
+                dessiner_quoi(canvas, etagere_coords[0] + 5, etage_coords[1] + 35,
+                              dimensions_wagon[0] * sm[1], etagere[0][2] * size_multiplier, "blue")
+                
+                etagere_coords[1] = etage_coords[1] + 35
+                dessine_marchandises(etagere, etagere_coords)
+
+            
             etage_coords[0] += dimensions_wagon[1] * size_multiplier + 5
-            largetagere = 0
 
         wagon_coords[0] += dimensions_wagon[1] * size_multiplier * len(wagon) + dimensions_wagon[
             1] * size_multiplier + 5 * (len(wagon) + 1)
