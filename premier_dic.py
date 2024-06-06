@@ -76,8 +76,7 @@ def calcul_utilite(liste_objets,dic):
 """
 
 # approché glouton
-def rangement_ratio(dic):
-    massmax = 0.6
+def rangement_ratio(dic,massmax):
     totalmass = 0
     totalutilite = 0
     sacados = []
@@ -105,48 +104,54 @@ def recherche_locale(dic,massmax):
     massmissing=massmax
     liste_all = []
     liste_retenue = []
+    liste_finale=[]
     for k,v in dic.items():
         liste_all.append(k)
 
-    liste_retenue=['Lampes']#rangement_ratio(dic_trie)
+    liste_retenue=['Lampes'] #anciennement rangement_ratio(dic_trie,0.6) avec des valeurs en moins
 
-    pourcentage_pop = 40
+    pourcentage_pop = 35
 
     #print('\n\nliste initiale:',liste_retenue)
     #print("score initial :",calcul_utilite(liste_retenue,dic))
     # print("\ntous les objets :",liste_all)
+    for j in range(10): #on fait le programme n fois pour garder la meilleur solution trouvée
+        for i in range(10000):
+            #si c'est 0 on enlève un élément
+            #si c'est 1 on rajoute un élément
 
-    for i in range(1000000):
-        #si c'est 0 on enlève un élément
-        #si c'est 1 on rajoute un élément
+            liste_tmp = liste_retenue.copy()
 
-        liste_tmp = liste_retenue.copy()
+            #pop ou append
+            if randint(0,100) < pourcentage_pop and len(liste_tmp) > 0:
+                liste_tmp.pop(randint(0,len(liste_tmp)-1))
+            else:
+                index_all = randint(0,len(liste_all)-1)
+                elt = liste_all[index_all]
+                if elt not in liste_tmp:
+                    liste_tmp.append(liste_all[index_all])
 
-        #pop ou append
-        if randint(0,100) < pourcentage_pop and len(liste_tmp) > 0:
-            liste_tmp.pop(randint(0,len(liste_tmp)-1))
+            #
+            #print(liste_tmp)
+            if calcul_masse(liste_tmp,dic) <= massmax + 0.0001:
+                #print("\nnouvelle liste :",liste_tmp)
+                #print("liste retenue :",liste_retenue)
+                utilite_tmp = calcul_utilite(liste_tmp,dic)
+                utilite_retenue = calcul_utilite(liste_retenue,dic)
+                #print(utilite_tmp," > ",utilite_retenue," ?")
+                if utilite_tmp > utilite_retenue:
+                    liste_retenue = liste_tmp.copy()
+                    print('--------------\nnouvelle liste retenue:',liste_retenue)
+                    print("score :",calcul_utilite(liste_retenue,dic))
+        if j==1:
+            liste_finale=liste_retenue.copy()
         else:
-            index_all = randint(0,len(liste_all)-1)
-            elt = liste_all[index_all]
-            if elt not in liste_tmp:
-                liste_tmp.append(liste_all[index_all])
-
-        #
-        #print(liste_tmp)
-        if calcul_masse(liste_tmp,dic) <= massmax + 0.0001:
-            #print("\nnouvelle liste :",liste_tmp)
-            #print("liste retenue :",liste_retenue)
-            utilite_tmp = calcul_utilite(liste_tmp,dic)
-            utilite_retenue = calcul_utilite(liste_retenue,dic)
-            #print(utilite_tmp," > ",utilite_retenue," ?")
-            if utilite_tmp > utilite_retenue:
-                liste_retenue = liste_tmp.copy()
-                #print('--------------\nnouvelle liste retenue:',liste_retenue)
-                #print("score :",calcul_utilite(liste_retenue,dic))
-
-        
-    print("\n-----------------\n\nliste finale :",liste_retenue)
-    print("score final :",calcul_utilite(liste_retenue,dic))
+            if calcul_utilite(liste_retenue,dic)>calcul_utilite(liste_finale,dic):
+                liste_finale=liste_retenue.copy()
+                print("\n-----------------\n\nbest actual list :",liste_finale)
+                print("best actual score :", calcul_utilite(liste_finale, dic))
+    print("\n-----------------\n\nliste finale :", liste_finale)
+    print("score final :",calcul_utilite(liste_finale,dic))
 
 
 
@@ -163,16 +168,19 @@ def recherche_locale(dic,massmax):
 if __name__ == "__main__":
     dic = calcul_ratio(dic)
     dic_trie = tri_ratio(dic)
-
-    sac = rangement_ratio(dic_trie)
+    temps1 = time.time()
+    for i in range(100000):
+        sac = rangement_ratio(dic_trie,5)
+    temps_tot1 = time.time() - temps1
+    print('voici le temps des rires et des chants',format(temps_tot1,".25f"))
     print('voici le sac',sac)
     print(calcul_utilite(sac,dic))
     print(calcul_masse(sac,dic))
 
-    temps1 = time.time()
-    recherche_locale(dic,0.6)
-    temps_tot1 = time.time() - temps1
-    print(format(temps_tot1,".25f"))
+    # temps1 = time.time()
+    # recherche_locale(dic,0.6)
+    # temps_tot1 = time.time() - temps1
+    # print(format(temps_tot1,".25f"))
     # dic_tronc = dict(list(dic_trie.items())[:18])
     #
     #

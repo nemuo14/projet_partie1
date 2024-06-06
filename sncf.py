@@ -7,6 +7,7 @@ dimensions_wagon = [11.583, 2.294, 2.569]
 
 import csv
 import tkinter as tk
+import time
 
 root = tk.Tk()
 
@@ -474,6 +475,11 @@ def tri_d2(data_marchandises): #par surface
         data_marchandises[i].append(data_marchandises[i][1] * data_marchandises[i][2])
     return sorted(data_marchandises, key=lambda x: x[4], reverse=True)
 
+def tri_d2_largeur_longeur(data_marchandises):
+    return sorted(data_marchandises, key=lambda x: (x[2],x[1]), reverse=True)
+
+
+
 
 def tri_d3(data_marchandises): #par volume
     for i in range(len(data_marchandises)):
@@ -497,13 +503,20 @@ if __name__ == "__main__":
     data_marchandises = read_data_from_csv()
 
     data_marchandises_offline_d1 = tri_d1(data_marchandises)
-    data_marchandises_offline_d2_lageur = tri_d2_largeur(data_marchandises)
+    data_marchandises_offline_d2_largeur = tri_d2_largeur(data_marchandises)
     data_marchandises_offline_d2 = tri_d2(data_marchandises)
+    data_marchandises_offline_d2_largeur_longueur=tri_d2_largeur_longeur(data_marchandises)
     data_marchandises_offline_d3 = tri_d3(data_marchandises)
     data_marchandises_offline_d3_hauteur= tri_d3_hauteur(data_marchandises)
+############################################################################################
     train_patrie = [[]]
+    vide=[[]]
+    temps1 = time.time()
+    for i in range(10000000): #pour estimer le temps
+        train_patrie = charger_train_d3(data_marchandises_offline_d3_hauteur, vide)
+    temps_tot1 = time.time() - temps1
+    print(format(temps_tot1,".25f"))
 
-    train_patrie = charger_train_d3(data_marchandises_offline_d3_hauteur, train_patrie)
 
     nb_wagons = 0
     nb_etages = 0
@@ -528,3 +541,46 @@ if __name__ == "__main__":
 
     # print(train_patrie)
     dessine_train_d3(train_patrie)
+#######################################################################
+    # train_patrie = [[]]
+    # vide=[[]]
+    # temps1 = time.time()
+    # for i in range(10000000): #pour estimer le temps
+    #     train_patrie = charger_train_d1(data_marchandises_offline_d1, vide)
+    # temps_tot1 = time.time() - temps1
+    # print(format(temps_tot1,".25f"))
+    #
+    # nb_wagons = 0
+    # nb_etages = 0
+    # nb_etageres = 0
+    # nb_marchandises = 0
+    # for wagon in train_patrie:
+    #     nb_wagons += 1
+    #     for marchandise in wagon:
+    #         nb_marchandises += 1
+    # print(nb_wagons)
+    # print(nb_marchandises)
+    # dessine_train_d1(train_patrie)
+###############################################################
+    # train_patrie = [[]]
+    # vide=[[]]
+    # temps1 = time.time()
+    # for i in range(1000000): #pour estimer le temps
+    #     train_patrie = charger_train_d2(data_marchandises, vide)
+    # temps_tot1 = time.time() - temps1
+    # print(format(temps_tot1,".25f"))
+    #
+    # nb_wagons = 0
+    # nb_etages = 0
+    # nb_etageres = 0
+    # nb_marchandises = 0
+    # for wagon in train_patrie:
+    #     nb_wagons += 1
+    #     for etagere in wagon:
+    #         nb_etageres+=1
+    #         for marchandise in etagere:
+    #             nb_marchandises += 1
+    # print(nb_wagons)
+    # print(nb_etageres)
+    # print(nb_marchandises)
+    # dessine_train_d2(train_patrie)
