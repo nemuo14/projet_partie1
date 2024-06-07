@@ -347,36 +347,34 @@ def charger_train_d3(data_marchandises, train):
 
         placed = False
 
-        for i in range(len(train)):  # parcourir tous les wagons
+        for i in range(len(train)):# parcourir tous les wagons
             wagon = train[i]
 
-            for j in range(len(wagon)):  # parcourir tous les étages
+            for j in range(len(wagon)):
                 etage = wagon[j]
 
-                for k in range(len(etage)):  # parcourir toutes les étagères
+                for k in range(len(etage)):
                     etagere = etage[k]
 
-                    if (not is_trop_long(etagere, marchandise)) and (not is_trop_large(etagere, marchandise)) and (
-                    not is_trop_haut(etagere, marchandise)) and (not placed):  # si la marchandise rentre dans l'étagère
-                        etagere.append(marchandise)  # on la met dans l'étagère
+                    if (not is_trop_long(etagere, marchandise)) and (not is_trop_large(etagere, marchandise)) and (not is_trop_haut(etagere, marchandise)) and (not placed):  # si la marchandise rentre dans l'étagère
+                        etagere.append(marchandise)
                         placed = True
 
                 # ici on a parcouru toutes les étagères de l'étage et on n'a pas trouvé de place pour la marchandise
-                if not placed:  # si on n'a pas trouvé de place pour la marchandise dans une des étagères existantes, on va créer une nouvelle étagère
-                    if largeur_utilisee_etage(etage) + marchandise[2] <= dimensions_wagon[
-                        1]:  # on vérifie si on peut créer une nouvelle étagère
+                if not placed: # si on n'a pas trouvé de place pour la marchandise dans une des étagères existantes, on va créer une nouvelle étagère
+                    if largeur_utilisee_etage(etage) + marchandise[2] <= dimensions_wagon[1]: # on vérifie si on peut créer une nouvelle étagère
                         etage.append([marchandise])
                         placed = True
 
             # ici on a parcouru tous les étages et on n'a pas trouvé de place pour une étagère pour la marchandise
-            if not placed:  # on va créer un nouvel étage
-                if hauteur_utilisee_wagon(wagon) + marchandise[3] <= dimensions_wagon[
-                    2]:  # on vérifie si on peut créer un nouvel étage
+            if not placed:
+                if hauteur_utilisee_wagon(wagon) + marchandise[3] <= dimensions_wagon[2]:
                     wagon.append([[marchandise]])
                     placed = True
 
+        # ici on a parcouru tous les wagons et on n'a pas trouvé de place dans un étage
         if not placed:
-            train.append([[[marchandise]]])  # on crée un nouveau wagon et on met la marchandise dedans
+            train.append([[[marchandise]]])
             placed = True
 
     return train
