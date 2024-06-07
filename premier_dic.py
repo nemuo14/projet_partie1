@@ -1,8 +1,9 @@
 import time
 import random as rd
-# nom : [masse, utilite, ratio]
 from random import randint
 
+
+# nom : [masse, utilite, ratio]
 dic = {
     'Pompe': [0.2, 1.5],
     'Démonte-pneus': [0.1, 1.5],
@@ -32,7 +33,7 @@ dic = {
 
 def calcul_ratio(dic):
     for key in dic:
-        dic[key].append( (dic[key][1]) / (dic[key][0]) ) #a division *23
+        dic[key].append( (dic[key][1])*(dic[key][1]) / (dic[key][0]) ) #a division *23
     return dic
 
 def tri_ratio(dic):
@@ -81,10 +82,11 @@ def rangement_ratio(dic,massmax):
     totalutilite = 0
     sacados = []
     for key in dic: #*23
-        #print(key)
-        if totalmass + dic[key][0] <= massmax: #23 add
+        print(key)
+        if totalmass + dic[key][0] <= massmax + 0.0001: #23 add
             totalmass += dic[key][0] #<23 add
             totalutilite += dic[key][1] #<23 add
+            print("on ajoute",key,"\n")
             sacados.append(key)
     return sacados
 
@@ -108,7 +110,8 @@ def recherche_locale(dic,massmax):
     for k,v in dic.items():
         liste_all.append(k)
 
-    liste_retenue=['Lampes'] #anciennement rangement_ratio(dic_trie,0.6) avec des valeurs en moins
+    #liste_retenue=['Lampes'] #anciennement rangement_ratio(dic_trie,0.6) avec des valeurs en moins
+    rangement_ratio(dic_trie,0.6)
 
     pourcentage_pop = 35
 
@@ -166,19 +169,29 @@ def recherche_locale(dic,massmax):
 
 
 if __name__ == "__main__":
+
+    cap = 0.6 # capacité du sac
+
     dic = calcul_ratio(dic)
     dic_trie = tri_ratio(dic)
+
     temps1 = time.time()
-    for i in range(100000):
-        sac = rangement_ratio(dic_trie,5)
+
+    #for i in range(100000):
+    #    sac = rangement_ratio(dic_trie,cap)
+
+    print(dic_trie)
+    sac = rangement_ratio(dic_trie,cap)
+
     temps_tot1 = time.time() - temps1
-    print('voici le temps des rires et des chants',format(temps_tot1,".25f"))
-    print('voici le sac',sac)
+
+    #print('voici le temps des rires et des chants',format(temps_tot1,".25f"))
+    #print('voici le sac',sac)
     print(calcul_utilite(sac,dic))
     print(calcul_masse(sac,dic))
 
     # temps1 = time.time()
-    # recherche_locale(dic,0.6)
+    # recherche_locale(dic,cap)
     # temps_tot1 = time.time() - temps1
     # print(format(temps_tot1,".25f"))
     # dic_tronc = dict(list(dic_trie.items())[:18])
@@ -186,7 +199,7 @@ if __name__ == "__main__":
     #
     # temps1=time.time()
     #
-    # #print(max(bruteforce(dic,4),key=lambda x:x[-1]))
+    # #print(max(bruteforce(dic,cap),key=lambda x:x[-1]))
     #
     # temps_tot1 = time.time()-temps1
     # print(format(temps_tot1,".25f"))
@@ -194,7 +207,7 @@ if __name__ == "__main__":
     #
     # temps2=time.time()
     #
-    # print(max(bruteforce(dic_tronc,5),key=lambda x:x[-1]))
+    # print(max(bruteforce(dic_tronc,cap),key=lambda x:x[-1]))
     #
     # temps_tot2 = time.time()-temps2
     # print(format(temps_tot2,".25f"))
